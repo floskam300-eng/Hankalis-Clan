@@ -15,6 +15,7 @@ import 'package:hankalis_clan/views/forgot_password.dart';
 import 'package:hankalis_clan/views/authentication.dart';
 import 'package:hankalis_clan/views/homepage.dart';
 import 'package:toastification/toastification.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(const MyApp());
