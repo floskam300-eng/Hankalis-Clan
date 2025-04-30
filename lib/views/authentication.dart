@@ -13,7 +13,7 @@ class Authentication extends StatelessWidget {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     final theme = Theme.of(context).colorScheme;
-    final controller = Get.find<LoginController>();
+    final controller = Get.find<AuthenticationController>();
 
     final nameController = TextEditingController();
     final emailController = TextEditingController();
@@ -83,7 +83,7 @@ class Authentication extends StatelessWidget {
                             final width = constraints.maxWidth;
                             return Container(
                               alignment: Alignment.center,
-                              height: height * 0.8,
+                              height: height * 0.9,
                               width: width < 650 ? width * 0.7 : width * 0.4,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,6 +110,7 @@ class Authentication extends StatelessWidget {
                                         style: TextStyle(
                                           fontSize: 30,
                                           fontWeight: FontWeight.bold,
+                                          fontFamily: "Georgia",
                                         ),
                                       ),
                                     ],
@@ -127,7 +128,7 @@ class Authentication extends StatelessWidget {
                                         Radius.circular(10),
                                       ),
                                     ),
-                                    child: GetBuilder<LoginController>(
+                                    child: GetBuilder<AuthenticationController>(
                                       builder:
                                           (controller) => Row(
                                             children: [
@@ -155,7 +156,7 @@ class Authentication extends StatelessWidget {
                                     title: "Continue with Google",
                                     asset: '../assets/google.png',
                                     onTap: () {
-                                      
+                                      controller.loginWithGoogle();
                                     },
                                   ),
                                   SizedBox(height: 10),
@@ -163,7 +164,7 @@ class Authentication extends StatelessWidget {
                                     title: "Continue with Facebook",
                                     asset: '../assets/facebook.png',
                                     onTap: () {
-
+                                      controller.loginWithFacebook();
                                     },
                                   ),
                                   SizedBox(height: 20),
@@ -205,7 +206,7 @@ class Authentication extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 20),
-                                  GetBuilder<LoginController>(
+                                  GetBuilder<AuthenticationController>(
                                     builder:
                                         (controller) =>
                                             controller.getIndex ==
@@ -217,15 +218,14 @@ class Authentication extends StatelessWidget {
                                                       icon: Icon(Icons.person),
                                                       controller:
                                                           nameController,
-                                                      validator: (
-                                                        String? name,
-                                                      ) {
-                                                        return controller
-                                                            .valideInputes(
-                                                              name!,
-                                                              InputType.name,
-                                                            );
-                                                      },
+                                                      validator:
+                                                          (
+                                                            String? name,
+                                                          ) => controller
+                                                              .valideInputes(
+                                                                name!,
+                                                                InputType.name,
+                                                              ),
                                                       inputType:
                                                           TextInputType.name,
                                                     ),
@@ -248,7 +248,7 @@ class Authentication extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 10),
                                   CustomFields(
-                                    title: "Password",
+                                    title: "password",
                                     icon: Icon(Icons.lock),
                                     controller: passwordController,
                                     validator: (String? password) {
@@ -258,14 +258,14 @@ class Authentication extends StatelessWidget {
                                       );
                                     },
                                     inputType: TextInputType.visiblePassword,
-                                    obscureText: true,
                                   ),
                                   Align(
                                     alignment: Alignment.topLeft,
-                                    child: GetBuilder<LoginController>(
+                                    child: GetBuilder<AuthenticationController>(
                                       builder:
                                           (controller) =>
-                                              controller.getIndex == 0
+                                              controller.getIndex ==
+                                                      AuthenticationType.login
                                                   ? TextButton(
                                                     onPressed:
                                                         () => Get.toNamed(
@@ -282,7 +282,7 @@ class Authentication extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 15),
-                                  GetBuilder<LoginController>(
+                                  GetBuilder<AuthenticationController>(
                                     builder:
                                         (controller) => MaterialButton(
                                           onPressed: () {
@@ -304,9 +304,6 @@ class Authentication extends StatelessWidget {
                                                     passwordController.text,
                                                   ),
                                                 );
-                                                emailController.clear();
-                                                passwordController.clear();
-                                                nameController.clear();
                                               }
                                             }
                                           },

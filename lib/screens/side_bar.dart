@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
 import "package:hankalis_clan/const.dart";
+import "package:hankalis_clan/controller/homepage_controller.dart";
 import "package:hankalis_clan/controller/side_bar_controller.dart";
 import "package:hankalis_clan/widgets/change_themes_buttons.dart";
 import "package:hankalis_clan/widgets/side_bar_item.dart";
@@ -12,6 +13,7 @@ class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    final HomepageController homepageController = Get.find();
     return Padding(
       padding:
           Get.width < 1100 ? const EdgeInsets.all(15) : const EdgeInsets.all(0),
@@ -119,11 +121,11 @@ class SideBar extends StatelessWidget {
                             children: [
                               ListTile(
                                 title: Text(
-                                  "Omar Shamy",
+                                  homepageController.user['name'],
                                   style: TextStyle(fontSize: 14),
                                 ),
                                 subtitle: Text(
-                                  "floskam6@gmail.com",
+                                  homepageController.user['email'],
                                   style: TextStyle(fontSize: 10),
                                 ),
                                 trailing: Container(
@@ -135,7 +137,7 @@ class SideBar extends StatelessWidget {
                                     color: Color.fromRGBO(62, 220, 120, 1),
                                   ),
                                   child: Text(
-                                    "  Roler  ",
+                                    "  ${homepageController.user['role']}  ",
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
@@ -144,10 +146,19 @@ class SideBar extends StatelessWidget {
                                 ),
                                 leading: ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
-                                  child: Image.asset(
-                                    "../assets/my_photo.jpg",
-                                    height: 40,
-                                  ),
+                                  child:
+                                      homepageController.user['photoUrl'] !=
+                                              null
+                                          ? Image.network(
+                                            homepageController.user['photoUrl'],
+                                            height: 40,
+                                            width: 40,
+                                          )
+                                          : Image.asset(
+                                            "../assets/user.png",
+                                            height: 40,
+                                            width: 40,
+                                          ),
                                 ),
                               ),
                               const SizedBox(height: 10),

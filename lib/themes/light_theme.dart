@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class LightTheme {
   var light = ThemeData(
     useMaterial3: true,
-    fontFamily: "Roboto",
+    fontFamily: "Quicksand",
     colorScheme: ColorScheme.light(
       onPrimary: Color.fromRGBO(242, 244, 247, 1),
       onSecondary: Color.fromRGBO(255, 254, 255, 1),

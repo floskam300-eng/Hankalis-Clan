@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 
 class MessageField extends StatelessWidget {
-  const MessageField({super.key});
+  const MessageField({super.key, this.onPressed});
+
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class MessageField extends StatelessWidget {
           fontSize: 14,
         ),
         prefixIcon: IconButton(
-          onPressed: () {},
+          onPressed: onPressed,
           icon: Icon(Icons.add_circle, color: theme.onSecondaryContainer),
         ),
         constraints: BoxConstraints(),

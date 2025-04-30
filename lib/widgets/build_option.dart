@@ -10,8 +10,8 @@ class BuildOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = Get.find<LoginController>().getIndex == index;
-    return GetBuilder<LoginController>(
+    bool isSelected = Get.find<AuthenticationController>().getIndex == index;
+    return GetBuilder<AuthenticationController>(
       builder:
           (controller) => MouseRegion(
             cursor: SystemMouseCursors.click,

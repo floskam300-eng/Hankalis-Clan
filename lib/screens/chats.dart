@@ -1,7 +1,8 @@
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 import 'package:hankalis_clan/const.dart';
+import 'package:hankalis_clan/controller/chats_controller.dart';
 import 'package:hankalis_clan/controller/side_bar_controller.dart';
 import 'package:hankalis_clan/widgets/custom_icon.dart';
 import 'package:hankalis_clan/widgets/message_field.dart';
@@ -18,6 +19,7 @@ class Chats extends StatelessWidget {
     final bool isLoading = false;
     final bool isPause = true;
     final theme = Theme.of(context).colorScheme;
+    final chatsController = Get.find<ChatsController>();
     return GetBuilder<SideBarController>(
       builder:
           (controller) => Expanded(
@@ -155,7 +157,11 @@ class Chats extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Expanded(child: MessageField()),
+                    Expanded(
+                      child: MessageField(
+                        onPressed: () async => await chatsController.readFile(),
+                      ),
+                    ),
                     SizedBox(width: 10),
                     CustomIcon(icon: Icons.send),
                   ],

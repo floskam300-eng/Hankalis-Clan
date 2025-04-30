@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/binding/authentication_binding.dart';
-import 'package:hankalis_clan/binding/games_binding.dart';
-import 'package:hankalis_clan/binding/history_news_binding.dart';
-import 'package:hankalis_clan/binding/history_slaves_binding.dart';
+import 'package:hankalis_clan/binding/forgot_password_binding.dart';
 import 'package:hankalis_clan/binding/homepage_binding.dart';
-import 'package:hankalis_clan/binding/leaderboard_binding.dart';
-import 'package:hankalis_clan/binding/news_activity_binding.dart';
-import 'package:hankalis_clan/binding/sell_slave_binding.dart';
-import 'package:hankalis_clan/binding/side_bar_binding.dart';
-import 'package:hankalis_clan/binding/view_image_binding.dart';
+import 'package:hankalis_clan/middlewares/auth_middleware.dart';
+import 'package:hankalis_clan/services/services.dart';
 import 'package:hankalis_clan/themes/dark_theme.dart';
 import 'package:hankalis_clan/views/forgot_password.dart';
 import 'package:hankalis_clan/views/authentication.dart';
 import 'package:hankalis_clan/views/homepage.dart';
 import 'package:toastification/toastification.dart';
+import 'package:url_strategy/url_strategy.dart';
 
-void main() {
+void main() async {
+  await mainAsync();
+  setPathUrlStrategy();
   runApp(const MyApp());
+}
+
+Future<void> mainAsync() async {
+  Get.putAsync(() async => Services());
 }
 
 class MyApp extends StatelessWidget {
@@ -36,22 +38,18 @@ class MyApp extends StatelessWidget {
             name: '/auth',
             page: () => const Authentication(),
             binding: AuthenticationBinding(),
+            middlewares: [AuthMiddleware()],
           ),
           GetPage(
             name: '/auth/forgot-password',
             page: () => const ForgotPassword(),
+            binding: ForgotPasswordBinding(),
           ),
-          GetPage(name: '/', page: () => const Homepage(), bindings: [
-            HomepageBinding(),
-            SideBarBinding(),
-            LeaderboardBinding(),
-            NewsActivityBinding(),
-            GamesBinding(),
-            SellSlaveBinding(),
-            HistorySlavesBinding(),
-            ViewImageBinding(),
-            HistoryNewsBinding()
-          ]),
+          GetPage(
+            name: '/home',
+            page: () => const Homepage(),
+            binding: HomepageBinding(),
+          ),
         ],
       ),
     );

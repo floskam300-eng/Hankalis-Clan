@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CustomButtons extends StatelessWidget {
-  const CustomButtons({super.key, required this.child});
+  const CustomButtons({super.key, required this.child, this.onTap});
 
   final Widget child;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     return MaterialButton(
-      onPressed: () {},
+      onPressed: onTap ?? () {},
       height: 50,
       minWidth: double.infinity,
       shape: RoundedRectangleBorder(

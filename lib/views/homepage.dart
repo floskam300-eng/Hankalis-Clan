@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/const.dart';
+import 'package:hankalis_clan/controller/homepage_controller.dart';
 import 'package:hankalis_clan/controller/side_bar_controller.dart';
 import 'package:hankalis_clan/screens/friends_side_bar.dart';
 import 'package:hankalis_clan/widgets/mini_side_bar_item.dart';
@@ -14,6 +15,7 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    Get.find<HomepageController>();
     return Scaffold(
       key: scaffoldKey,
       drawer: Drawer(child: SideBar()),

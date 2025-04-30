@@ -23,57 +23,57 @@ class ChatItem extends StatelessWidget {
     final controller = Get.find<SideBarController>();
     final isSelected = controller.selectedChat == index;
     final theme = Theme.of(context).colorScheme;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color:
-            checkDeviceSize() == DeviceType.mobile
-                ? null
-                : isSelected
-                ? theme.onPrimaryContainer
-                : null,
-      ),
-      child: ListTile(
-        onTap: () {
-          controller.setSelectedChat(
-            index,
-            Chat(
-              name: name,
-              avatarUrl: image,
-              message: lastMsgs,
-              numOfMsgs: numOfMsgs,
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      child: Material(
+        color: isSelected ? theme.onPrimaryContainer : Colors.transparent,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: ListTile(
+            onTap: () {
+              controller.setSelectedChat(
+                index,
+                Chat(
+                  name: name,
+                  avatarUrl: image,
+                  message: lastMsgs,
+                  numOfMsgs: numOfMsgs,
+                ),
+              );
+              if (checkDeviceSize() == DeviceType.mobile) {
+                Get.to(() => ChatView());
+              }
+            },
+            title: Text(name, style: TextStyle(fontSize: 14)),
+            subtitle: Text(
+              lastMsgs,
+              style: TextStyle(color: theme.onSecondaryContainer, fontSize: 10),
             ),
-          );
-          if (checkDeviceSize() == DeviceType.mobile) {
-            Get.to(() => ChatView());
-          }
-        },
-        title: Text(name, style: TextStyle(fontSize: 14)),
-        subtitle: Text(
-          lastMsgs,
-          style: TextStyle(color: theme.onSecondaryContainer, fontSize: 10),
-        ),
-        leading: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(100)),
-          child: Image.asset(image, height: 40, width: 40),
-        ),
-        trailing:
-            numOfMsgs < 0
-                ? SizedBox()
-                : SizedBox(
-                  height: 20,
-                  child: CircleAvatar(
-                    backgroundColor: Color.fromRGBO(62, 220, 120, 1),
-                    child: Text(
-                      numOfMsgs.toString(),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+            leading: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(100)),
+              child: Image.asset(image, height: 40, width: 40),
+            ),
+            trailing:
+                numOfMsgs < 0
+                    ? SizedBox()
+                    : SizedBox(
+                      height: 20,
+                      child: CircleAvatar(
+                        backgroundColor: Color.fromRGBO(62, 220, 120, 1),
+                        child: Text(
+                          numOfMsgs.toString(),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+          ),
+        ),
       ),
     );
   }

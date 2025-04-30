@@ -1,17 +1,28 @@
+// ignore: deprecated_member_use
+import 'dart:html' as html;
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 
 import 'package:hankalis_clan/services/auth_service.dart';
+import 'package:hankalis_clan/services/services.dart';
 import 'package:toastification/toastification.dart';
 
 enum InputType { name, email, password }
+
 enum AuthenticationType { login, register }
 
-class LoginController extends GetxController {
+class AuthenticationController extends GetxController {
   AuthenticationType _selectedIndex = AuthenticationType.login;
+  bool _isVisibile = true;
 
   get getIndex => _selectedIndex;
+  get getIsVisibile => _isVisibile;
+
+  set isVisibile(bool value) {
+    _isVisibile = value;
+    update();
+  }
 
   set newIndex(AuthenticationType index) {
     _selectedIndex = index;
@@ -43,6 +54,45 @@ class LoginController extends GetxController {
     return null;
   }
 
+  @override
+  void onReady() {
+    super.onReady();
+    checkForToken();
+  }
+
+  void checkForToken() {
+    final fullUrl = html.window.location.href;
+
+    try {
+      final uri = Uri.parse(fullUrl);
+
+      if (uri.queryParameters.containsKey('token')) {
+        final token = uri.queryParameters['token'];
+        toastification.show(
+          title: Text("Login successful!"),
+          type: ToastificationType.success,
+          style: ToastificationStyle.fillColored,
+          autoCloseDuration: const Duration(seconds: 5),
+        );
+
+        Services.storage.setString("token", token!);
+        Get.offAllNamed("/home", arguments: {"token": token});
+      }
+    } catch (e) {
+      debugPrint("Error parsing URL: $e");
+    }
+  }
+
+  Future<void> loginWithGoogle() async {
+    const url = 'http://localhost:3000/api/auth/login/google';
+    html.window.location.href = url;
+  }
+
+  Future<void> loginWithFacebook() async {
+    const url = 'http://localhost:3000/api/auth/login/facebook';
+    html.window.location.href = url;
+  }
+
   Future<void> login({
     required (String email, String password) credentials,
   }) async {
@@ -50,16 +100,17 @@ class LoginController extends GetxController {
       credentials: {"email": credentials.$1, "password": credentials.$2},
     );
 
-    debugPrint("token: ${response['token']}");
-
     if (response['message'] == null) {
+      Services.storage.setString("token", response['token']);
       toastification.show(
         title: Text("Login successful!"),
         type: ToastificationType.success,
         style: ToastificationStyle.fillColored,
         autoCloseDuration: const Duration(seconds: 5),
       );
-    } else if (response['message'] == "Please verify your email before logging in") {
+      Get.toNamed("/home", arguments: {"token": response['token']});
+    } else if (response['message'] ==
+        "Please verify your email before logging in") {
       toastification.show(
         title: Text(response['message']),
         type: ToastificationType.warning,
@@ -80,7 +131,11 @@ class LoginController extends GetxController {
     required (String name, String email, String password) credentials,
   }) async {
     final response = await AuthService().register(
-      credentials: {"name": credentials.$1, "email": credentials.$2, "password": credentials.$3},
+      credentials: {
+        "name": credentials.$1,
+        "email": credentials.$2,
+        "password": credentials.$3,
+      },
     );
 
     if (response['message'] != "User already exists") {
