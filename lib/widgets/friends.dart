@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
+import 'package:hankalis_clan/controller/homepage_controller.dart';
 import 'package:hankalis_clan/widgets/friend_item.dart';
 
 class Friends extends StatelessWidget {
@@ -76,7 +77,20 @@ class Friends extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 10),
-                        FriendItem(name: "name", id: "id", picture: "")
+                        FriendItem(
+                          name: "Omar Shamy",
+                          id: "680c05851f12053393d9048f",
+                          picture:
+                              Get.find<HomepageController>().user['photoUrl']
+                                  .toString(),
+                        ),
+                        FriendItem(
+                          name: "Omar Shamy",
+                          id: "680c05851f12053393d9048f",
+                          picture:
+                              Get.find<HomepageController>().user['photoUrl']
+                                  .toString(),
+                        ),
                       ],
                     ),
                   ),
