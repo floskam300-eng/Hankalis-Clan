@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DarkTheme {
   final dark = ThemeData(
     useMaterial3: true,
-    fontFamily: "Quicksand",
+    fontFamily: "ComicRelief",
     colorScheme: ColorScheme.dark(
       onPrimary: Color.fromRGBO(21, 23, 25, 1),
       onSecondary: Color.fromRGBO(35, 38, 39, 1),

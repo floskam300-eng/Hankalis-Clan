@@ -5,11 +5,12 @@ class FriendRequestItem extends StatelessWidget {
     super.key,
     required this.id,
     required this.name,
-    required this.picture,
+    this.picture,
     this.onTap,
   });
 
-  final String id, name, picture;
+  final String? picture;
+  final String id, name;
   final void Function()? onTap;
 
   @override
@@ -19,7 +20,7 @@ class FriendRequestItem extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        title: Text(name),
+        title: Text(name, style: TextStyle(fontSize: 14)),
         subtitle: Text(
           "ID: $id",
           style: TextStyle(color: Colors.grey, fontSize: 12),
@@ -45,7 +46,10 @@ class FriendRequestItem extends StatelessWidget {
         ),
         leading: ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          child: Image.network(picture),
+          child:
+              picture == null
+                  ? Image.asset("assets/user.png")
+                  : Image.network(picture!),
         ),
       ),
     );

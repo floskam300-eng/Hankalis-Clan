@@ -5,7 +5,6 @@ class NoChats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
     return Expanded(
       child: Center(
         child: Column(
@@ -15,7 +14,7 @@ class NoChats extends StatelessWidget {
             Text(
               "No chats opend.",
               style: TextStyle(
-                color: theme.onSecondaryContainer,
+                color: Colors.grey.shade600,
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
               ),
@@ -23,7 +22,7 @@ class NoChats extends StatelessWidget {
             Text(
               "choose chat from the right side.",
               style: TextStyle(
-                color: theme.onPrimaryContainer,
+                color: Colors.grey.shade800,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),

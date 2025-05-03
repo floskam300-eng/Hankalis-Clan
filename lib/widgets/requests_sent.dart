@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hankalis_clan/controller/homepage_controller.dart';
+import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
 import 'package:hankalis_clan/widgets/friend_request_item.dart';
 
 class RequestsSent extends StatelessWidget {
@@ -26,7 +26,7 @@ class RequestsSent extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text(
-                      "Firend Requests",
+                      "Friend Requests",
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -40,24 +40,55 @@ class RequestsSent extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 320,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        FriendRequestItem(
-                          id: "680c05851f12053393d9048f",
-                          name: "Omar Shamy",
-                          picture:
-                              Get.find<HomepageController>().user['photoUrl'],
-                        ),
-                        FriendRequestItem(
-                          id: "780c05851f12053393d9048f",
-                          name: "7mod",
-                          picture:
-                              Get.find<HomepageController>().user['photoUrl'],
-                        ),
-                      ],
+                  Expanded(
+                    child: SizedBox(
+                      width: 320,
+                      child: GetBuilder<FirendsSideBarController>(
+                        builder: (controller) {
+                          return controller.friendRequest.isNotEmpty
+                              ? ListView.builder(
+                                itemCount: controller.friendRequest.length,
+                                itemBuilder:
+                                    (context, index) => FriendRequestItem(
+                                      id:
+                                          controller
+                                              .friendRequest[index]['id'],
+                                      name:
+                                          controller
+                                              .friendRequest[index]['name'],
+                                      picture:
+                                          controller
+                                              .friendRequest[index]['photoUrl'],
+                                      onTap: () {
+                                        controller.friendRequestCancel(
+                                          controller
+                                              .friendRequest[index]['id'],
+                                        );
+                                      },
+                                    ),
+                              )
+                              : Center(
+                                child: ListTile(
+                                  title: Text(
+                                    "No friend requests.",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  subtitle: Text(
+                                    "You don't have any friend requests.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.grey.shade700,
+                                    ),
+                                  ),
+                                ),
+                              );
+                        },
+                      ),
                     ),
                   ),
                 ],

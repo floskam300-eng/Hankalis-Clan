@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hankalis_clan/controller/homepage_controller.dart';
+import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
 import 'package:hankalis_clan/widgets/friend_recceived_item.dart';
 
 class RequestsReceived extends StatelessWidget {
@@ -26,7 +26,7 @@ class RequestsReceived extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text(
-                      "Firend Requests Received",
+                      "Friend Requests Received",
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -40,24 +40,65 @@ class RequestsReceived extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 320,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        FriendRecceivedItem(
-                          id: "680c05851f12053393d9048f",
-                          name: "Omar Shamy",
-                          picture:
-                              Get.find<HomepageController>().user['photoUrl'],
-                        ),
-                        FriendRecceivedItem(
-                          id: "780c05851f12053393d9048f",
-                          name: "7mod",
-                          picture:
-                              Get.find<HomepageController>().user['photoUrl'],
-                        ),
-                      ],
+                  Expanded(
+                    child: SizedBox(
+                      width: 330,
+                      child: GetBuilder<FirendsSideBarController>(
+                        builder:
+                            (controller) =>
+                                controller.friendReceived.isNotEmpty
+                                    ? ListView.builder(
+                                      itemCount:
+                                          controller.friendReceived.length,
+                                      itemBuilder:
+                                          (
+                                            context,
+                                            index,
+                                          ) => FriendRecceivedItem(
+                                            id:
+                                                controller
+                                                    .friendReceived[index]['id'],
+                                            name:
+                                                controller
+                                                    .friendReceived[index]['name'],
+                                            picture:
+                                                controller
+                                                    .friendReceived[index]['photoUrl'],
+                                            onAccept: () {
+                                              controller.emitFriendAcceptRequest(
+                                                controller
+                                                    .friendReceived[index]['id'],
+                                              );
+                                            },
+                                            onDecline: () {
+                                              controller.emitFriendDeclineRequest(
+                                                controller
+                                                    .friendReceived[index]['id'],
+                                              );
+                                            },
+                                          ),
+                                    )
+                                    : Center(
+                                      child: ListTile(
+                                        title: Text(
+                                          "No friend received.",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.grey.shade600,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        subtitle: Text(
+                                          "You don't have any friend received.",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.grey.shade700,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                      ),
                     ),
                   ),
                 ],

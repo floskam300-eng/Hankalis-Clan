@@ -5,12 +5,13 @@ class FriendRecceivedItem extends StatelessWidget {
     super.key,
     required this.id,
     required this.name,
-    required this.picture,
+    this.picture,
     this.onAccept,
     this.onDecline,
   });
 
-  final String id, name, picture;
+  final String? picture;
+  final String id, name;
   final void Function()? onAccept;
   final void Function()? onDecline;
 
@@ -65,7 +66,10 @@ class FriendRecceivedItem extends StatelessWidget {
         ),
         leading: ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          child: Image.network(picture),
+          child:
+              picture == null
+                  ? Image.asset("assets/user.png")
+                  : Image.network(picture!),
         ),
       ),
     );

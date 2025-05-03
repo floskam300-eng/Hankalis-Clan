@@ -1,3 +1,6 @@
+// ignore: deprecated_member_use
+import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
@@ -56,7 +59,7 @@ class FriendsSideBar extends StatelessWidget {
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 decoration: InputDecoration(
-                                  hintText: "Search",
+                                  hintText: "Search your chats",
                                   hintStyle: TextStyle(
                                     color: theme.onPrimaryContainer,
                                     fontSize: 14,
@@ -127,6 +130,7 @@ class FriendsSideBar extends StatelessWidget {
                         CustomButtons(
                           onTap: () async {
                             await Services.storage.remove("token");
+                            html.window.location.href = '/';
                             toastification.show(
                               title: Text("Token removed!"),
                               type: ToastificationType.success,

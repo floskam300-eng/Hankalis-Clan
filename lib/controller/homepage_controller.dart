@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:hankalis_clan/services/services.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:toastification/toastification.dart';
 
 class HomepageController extends GetxController {
   late Map user;
@@ -27,6 +28,7 @@ class HomepageController extends GetxController {
     }
 
     user = decodeToken(token)!;
+    debugPrint("User: $user");
   }
 
   void connectToServer() {
@@ -53,7 +55,16 @@ class HomepageController extends GetxController {
       html.window.location.href = '/';
     });
 
-    socket.on('error', (error) => debugPrint('Error: $error'));
+    socket.on(
+      'error',
+      (error) => toastification.show(
+        title: Text(error.toString()),
+        type: ToastificationType.error,
+        style: ToastificationStyle.fillColored,
+        autoCloseDuration: const Duration(seconds: 5),
+      ),
+    );
+
     socket.onDisconnect((_) => debugPrint('Disconnected from server...'));
   }
 

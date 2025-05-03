@@ -5,19 +5,36 @@ class FriendItem extends StatelessWidget {
     super.key,
     required this.name,
     required this.id,
-    required this.picture,
+    this.picture,
+    this.onTap,
   });
 
-  final String name, id, picture;
+  final String name, id;
+  final String? picture;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Card(
       child: ListTile(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        onTap: () {},
+        trailing: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: onTap,
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: theme.onPrimary,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Icon(Icons.person_remove, color: Colors.red),
+            ),
+          ),
+        ),
         title: Text(name),
         subtitle: Text(
           "ID: $id",
@@ -27,7 +44,10 @@ class FriendItem extends StatelessWidget {
         ),
         leading: ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          child: Image.network(picture),
+          child:
+              picture == null
+                  ? Image.asset("assets/user.png")
+                  : Image.network(picture!),
         ),
       ),
     );

@@ -50,6 +50,8 @@ class ChatItem extends StatelessWidget {
             subtitle: Text(
               lastMsgs,
               style: TextStyle(color: theme.onSecondaryContainer, fontSize: 10),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             leading: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(100)),

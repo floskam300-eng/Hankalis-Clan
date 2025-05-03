@@ -67,26 +67,33 @@ class Game extends StatelessWidget {
                 onTap: () {
                   Get.generalDialog(
                     pageBuilder:
-                        (context, animation, secondaryAnimation) => GestureDetector(
-                          onTap: () => Get.back(),
-                          child: Scaffold(
-                            backgroundColor: Colors.transparent,
-                            body: Center(
-                              child: SizedBox(
-                                width: Get.width * 0.8,
-                                child: Hero(
-                                  tag: photo,
-                                  child: Image.asset(photo, fit: BoxFit.fitWidth),
+                        (context, animation, secondaryAnimation) =>
+                            GestureDetector(
+                              onTap: () => Get.back(),
+                              child: Scaffold(
+                                backgroundColor: Colors.transparent,
+                                body: Center(
+                                  child: SizedBox(
+                                    width: Get.width * 0.8,
+                                    child: Hero(
+                                      tag: photo,
+                                      child: Image.asset(
+                                        photo,
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
                   );
                 },
                 child: Hero(
                   tag: photo,
-                  child: Image.asset(photo, fit: BoxFit.fitWidth),
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.zoomIn,
+                    child: Image.asset(photo, fit: BoxFit.cover),
+                  ),
                 ),
               ),
             ),

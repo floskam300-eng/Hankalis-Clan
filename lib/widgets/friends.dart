@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
-import 'package:hankalis_clan/controller/homepage_controller.dart';
 import 'package:hankalis_clan/widgets/friend_item.dart';
+import 'package:panara_dialogs/panara_dialogs.dart';
 
 class Friends extends StatelessWidget {
   const Friends({super.key});
@@ -10,58 +10,84 @@ class Friends extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    final searchController = TextEditingController();
     final FirendsSideBarController friendsSideController =
         Get.find<FirendsSideBarController>();
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Align(
-        alignment: Alignment.topLeft,
-        child: Center(
-          child: SafeArea(
-            child: Container(
-              width: 350,
-              decoration: BoxDecoration(
-                color: theme.onSecondary,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(
-                      "Friends",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(
-                      "This list of your friends.",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: theme.onSecondaryContainer,
-                      ),
+      body: Center(
+        child: SafeArea(
+          child: Container(
+            width: 350,
+            decoration: BoxDecoration(
+              color: theme.onSecondary,
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text(
+                    "Friends",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    "This list of your friends.",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.onSecondaryContainer,
                     ),
                   ),
-                  SizedBox(
+                ),
+                Expanded(
+                  child: SizedBox(
                     width: 300,
                     child: Column(
                       children: [
                         const SizedBox(height: 10),
                         TextFormField(
                           keyboardType: TextInputType.webSearch,
-                          validator:
-                              (String? search) => friendsSideController
-                                  .valideInputes(search!, InputType.name),
-                          controller: searchController,
+                          controller: friendsSideController.searchController,
                           style: TextStyle(fontSize: 14),
+                          onChanged: (String value) {
+                            if (value.isEmpty) {
+                              friendsSideController.searchFriends(value);
+                            }
+                          },
+                          onEditingComplete: () {
+                            friendsSideController.searchFriends(
+                              friendsSideController.searchController.text,
+                            );
+                          },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: InputDecoration(
-                            hintText: "Search",
+                            hintText: "Search by name",
                             hintStyle: TextStyle(
                               color: theme.onPrimaryContainer,
                               fontSize: 14,
+                            ),
+                            suffixIcon: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: () {
+                                  friendsSideController.searchFriends(
+                                    friendsSideController.searchController.text,
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: theme.onSecondary,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.search,
+                                    color: theme.onTertiary,
+                                  ),
+                                ),
+                              ),
                             ),
                             prefixIcon: Icon(Icons.search),
                             prefixIconColor: theme.onPrimaryContainer,
@@ -77,25 +103,81 @@ class Friends extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 10),
-                        FriendItem(
-                          name: "Omar Shamy",
-                          id: "680c05851f12053393d9048f",
-                          picture:
-                              Get.find<HomepageController>().user['photoUrl']
-                                  .toString(),
-                        ),
-                        FriendItem(
-                          name: "Omar Shamy",
-                          id: "680c05851f12053393d9048f",
-                          picture:
-                              Get.find<HomepageController>().user['photoUrl']
-                                  .toString(),
+                        Expanded(
+                          child: GetBuilder<FirendsSideBarController>(
+                            builder:
+                                (controller) =>
+                                    controller.filteredFriends.isNotEmpty
+                                        ? ListView.builder(
+                                          itemCount:
+                                              controller.filteredFriends.length,
+                                          itemBuilder:
+                                              (context, index) => FriendItem(
+                                                id:
+                                                    controller
+                                                        .filteredFriends[index]["id"],
+                                                name:
+                                                    controller
+                                                        .filteredFriends[index]["name"],
+                                                picture:
+                                                    controller
+                                                        .filteredFriends[index]["photoUrl"],
+                                                onTap: () {
+                                                  PanaraConfirmDialog.show(
+                                                    context,
+                                                    imagePath:
+                                                        "../../assets/confirm.png",
+                                                    title: "Delete friend.",
+                                                    message:
+                                                        "Are you sure you want to delete this friend?",
+                                                    confirmButtonText:
+                                                        "Confirm",
+                                                    cancelButtonText: "Cancel",
+                                                    onTapCancel: () {
+                                                      Get.back();
+                                                    },
+                                                    onTapConfirm: () {
+                                                      controller.friendRemove(
+                                                        controller
+                                                            .filteredFriends[index]["id"],
+                                                      );
+                                                      Get.back();
+                                                    },
+                                                    panaraDialogType:
+                                                        PanaraDialogType
+                                                            .warning,
+                                                    barrierDismissible: false,
+                                                  );
+                                                },
+                                              ),
+                                        )
+                                        : Center(
+                                          child: ListTile(
+                                            title: Text(
+                                              "No friends.",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: Colors.grey.shade600,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            subtitle: Text(
+                                              "You don't have any friends.",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.grey.shade700,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

@@ -38,7 +38,6 @@ dependencies:
   flutter_svg: ^2.0.17
   chat_bubbles: ^1.7.0
   bubble: ^1.2.1
-  stream_chat_flutter: ^9.8.0
   http: ^1.3.0
   toastification: ^3.0.2
   url_strategy: ^0.3.0
@@ -47,6 +46,7 @@ dependencies:
   socket_io_client: ^3.1.1
   file_picker: ^10.1.2
   dynamic_tabbar: ^1.0.9
+  panara_dialogs: ^0.1.5
 
 dev_dependencies:
   flutter_test:
@@ -93,11 +93,11 @@ flutter:
         # - asset: assets/fonts/Montserrat-Italic-VariableFont_wght.ttf
         #   style: italic
   #         style: italic
-    # - family: Numans
-    #   fonts:
-    #     - asset: assets/fonts/Numans-Regular.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+    - family: ComicRelief
+      fonts:
+        - asset: assets/fonts/ComicRelief-Regular.ttf
+        - asset: assets/fonts/ComicRelief-Bold.ttf
+          weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

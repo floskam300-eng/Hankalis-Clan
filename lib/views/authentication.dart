@@ -110,7 +110,6 @@ class Authentication extends StatelessWidget {
                                         style: TextStyle(
                                           fontSize: 30,
                                           fontWeight: FontWeight.bold,
-                                          fontFamily: "Georgia",
                                         ),
                                       ),
                                     ],
