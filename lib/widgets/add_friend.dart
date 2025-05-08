@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
+import 'package:hankalis_clan/controller/friends_controller.dart';
 import 'package:hankalis_clan/widgets/custom_buttons.dart';
 
 class AddFriend extends StatelessWidget {
@@ -10,7 +10,7 @@ class AddFriend extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final friendIdController = TextEditingController();
-    final controller = Get.find<FirendsSideBarController>();
+    final controller = Get.find<FriendsController>();
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Colors.transparent,

@@ -1,16 +1,13 @@
-// ignore: deprecated_member_use
-import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
 import 'package:hankalis_clan/controller/side_bar_controller.dart';
-import 'package:hankalis_clan/services/services.dart';
-import 'package:hankalis_clan/widgets/chat_item.dart';
+import 'package:hankalis_clan/model/private_room.dart';
+import 'package:hankalis_clan/screens/create_public_room.dart';
+import 'package:hankalis_clan/widgets/room_item.dart';
 import 'package:hankalis_clan/widgets/custom_buttons.dart';
 import 'package:hankalis_clan/widgets/custom_icon.dart';
-import 'package:hankalis_clan/widgets/friends_widgets.dart';
-import 'package:toastification/toastification.dart';
+import 'package:hankalis_clan/screens/friends.dart';
 
 class FriendsSideBar extends StatelessWidget {
   const FriendsSideBar({super.key});
@@ -83,7 +80,23 @@ class FriendsSideBar extends StatelessWidget {
                               icon: Icons.person,
                               onTap: () {
                                 Get.generalDialog(
-                                  pageBuilder: (_, __, ___) => FriendsWidgets(),
+                                  transitionDuration: Duration(
+                                    milliseconds: 250,
+                                  ),
+                                  transitionBuilder:
+                                      (
+                                        context,
+                                        animation,
+                                        secondaryAnimation,
+                                        child,
+                                      ) => SlideTransition(
+                                        position: Tween<Offset>(
+                                          begin: const Offset(1, 0),
+                                          end: Offset.zero,
+                                        ).animate(animation),
+                                        child: child,
+                                      ),
+                                  pageBuilder: (_, __, ___) => Friends(),
                                 );
                               },
                             ),
@@ -94,33 +107,59 @@ class FriendsSideBar extends StatelessWidget {
                         const SizedBox(height: 10),
                         Expanded(
                           child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                ChatItem(
-                                  name: "Edoda elsokhna",
-                                  lastMsgs: "7mod can we marry pls?",
-                                  image: '../assets/eldoda.jpg',
-                                  numOfMsgs: 10,
-                                  index: 0,
-                                ),
-                                SizedBox(height: 1),
-                                ChatItem(
-                                  name: "Tok tok 7azem",
-                                  lastMsgs: "can i see your ass?",
-                                  image: '../assets/hankalis_logo.webp',
-                                  numOfMsgs: 5,
-                                  index: 1,
-                                ),
-                                SizedBox(height: 1),
-                                ChatItem(
-                                  name: "Ahmed",
-                                  lastMsgs:
-                                      "ahmed can you tell me yameta kodasaiii?",
-                                  image: '../assets/ahmed.jpg',
-                                  numOfMsgs: 1,
-                                  index: 2,
-                                ),
-                              ],
+                            child: GetBuilder<FirendsSideBarController>(
+                              builder:
+                                  (controller) => Column(
+                                    children: [
+                                      controller.rooms.isEmpty
+                                          ? Center(
+                                            child: ListTile(
+                                              title: Text(
+                                                "No Chats.",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20,
+                                                  color: Colors.grey.shade600,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              subtitle: Text(
+                                                "You don't have any chats.",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: Colors.grey.shade700,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                          : Column(
+                                            children: [
+                                              for (
+                                                int index = 0;
+                                                index < controller.rooms.length;
+                                                index++
+                                              )
+                                                RoomItem(
+                                                  room: PrivateRoom(
+                                                    id:
+                                                        controller
+                                                            .rooms[index]['id'],
+                                                    name:
+                                                        controller
+                                                            .rooms[index]['name'],
+                                                    photoUrl:
+                                                        controller
+                                                            .rooms[index]['photoUrl'],
+                                                    type:
+                                                        controller
+                                                            .rooms[index]['type'],
+                                                  ),
+                                                  index: index,
+                                                ),
+                                            ],
+                                          ),
+                                    ],
+                                  ),
                             ),
                           ),
                         ),
@@ -128,14 +167,25 @@ class FriendsSideBar extends StatelessWidget {
                         Divider(color: theme.onPrimaryContainer),
                         const SizedBox(height: 10),
                         CustomButtons(
-                          onTap: () async {
-                            await Services.storage.remove("token");
-                            html.window.location.href = '/';
-                            toastification.show(
-                              title: Text("Token removed!"),
-                              type: ToastificationType.success,
-                              style: ToastificationStyle.fillColored,
-                              autoCloseDuration: const Duration(seconds: 5),
+                          onTap: () {
+                            Get.generalDialog(
+                              transitionDuration: Duration(milliseconds: 250),
+                              transitionBuilder:
+                                  (
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                    child,
+                                  ) => SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(1, 0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  ),
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      CreatePublicRoom(),
                             );
                           },
                           child: Row(

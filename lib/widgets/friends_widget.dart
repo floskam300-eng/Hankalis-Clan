@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
+import 'package:hankalis_clan/controller/friends_controller.dart';
 import 'package:hankalis_clan/widgets/friend_item.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
 
-class Friends extends StatelessWidget {
-  const Friends({super.key});
+class FriendsWidget extends StatelessWidget {
+  const FriendsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    final FirendsSideBarController friendsSideController =
-        Get.find<FirendsSideBarController>();
+    final FriendsController friendsController =
+        Get.find<FriendsController>();
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
@@ -46,16 +46,16 @@ class Friends extends StatelessWidget {
                         const SizedBox(height: 10),
                         TextFormField(
                           keyboardType: TextInputType.webSearch,
-                          controller: friendsSideController.searchController,
+                          controller: friendsController.searchController,
                           style: TextStyle(fontSize: 14),
                           onChanged: (String value) {
                             if (value.isEmpty) {
-                              friendsSideController.searchFriends(value);
+                              friendsController.searchFriends(value);
                             }
                           },
                           onEditingComplete: () {
-                            friendsSideController.searchFriends(
-                              friendsSideController.searchController.text,
+                            friendsController.searchFriends(
+                              friendsController.searchController.text,
                             );
                           },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -69,8 +69,8 @@ class Friends extends StatelessWidget {
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
                                 onTap: () {
-                                  friendsSideController.searchFriends(
-                                    friendsSideController.searchController.text,
+                                  friendsController.searchFriends(
+                                    friendsController.searchController.text,
                                   );
                                 },
                                 child: Container(
@@ -104,7 +104,7 @@ class Friends extends StatelessWidget {
                         ),
                         SizedBox(height: 10),
                         Expanded(
-                          child: GetBuilder<FirendsSideBarController>(
+                          child: GetBuilder<FriendsController>(
                             builder:
                                 (controller) =>
                                     controller.filteredFriends.isNotEmpty

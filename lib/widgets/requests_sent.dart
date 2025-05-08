@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
+import 'package:hankalis_clan/controller/friends_controller.dart';
 import 'package:hankalis_clan/widgets/friend_request_item.dart';
 
 class RequestsSent extends StatelessWidget {
@@ -43,7 +43,7 @@ class RequestsSent extends StatelessWidget {
                   Expanded(
                     child: SizedBox(
                       width: 320,
-                      child: GetBuilder<FirendsSideBarController>(
+                      child: GetBuilder<FriendsController>(
                         builder: (controller) {
                           return controller.friendRequest.isNotEmpty
                               ? ListView.builder(

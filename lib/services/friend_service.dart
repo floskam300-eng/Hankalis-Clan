@@ -6,10 +6,7 @@ class FriendsService {
   FriendsService(this.socket);
 
   void emitFriendRequest(String userId, String friendId) {
-    socket.emit("friend_request", {
-      "userId": userId,
-      "friendId": friendId,
-    });
+    socket.emit("friend_request", {"userId": userId, "friendId": friendId});
   }
 
   void onFriendRemoveRequest(Function(dynamic) callback) {
@@ -42,6 +39,10 @@ class FriendsService {
 
   void onFriendCancelRequest(Function(dynamic) callback) {
     socket.on("friend_request_canceled", callback);
+  }
+
+  void onFriendCancelRequestFriend(Function(dynamic) callback) {
+    socket.on("friend_request_canceled_friend", callback);
   }
 
   void onFriendRequestSent(Function(dynamic) callback) {

@@ -1,0 +1,105 @@
+import 'package:dynamic_tabbar/dynamic_tabbar.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
+import 'package:hankalis_clan/widgets/add_friend.dart';
+import 'package:hankalis_clan/widgets/friends_widget.dart';
+import 'package:hankalis_clan/widgets/requests_received.dart';
+import 'package:hankalis_clan/widgets/requests_sent.dart';
+
+class Friends extends StatelessWidget {
+  const Friends({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      child: Center(
+        child: Material(
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            child: Container(
+              height: 500,
+              constraints: BoxConstraints(minWidth: 400, maxWidth: 450),
+              decoration: BoxDecoration(
+                color: theme.onSecondary,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: SafeArea(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: GetBuilder<FirendsSideBarController>(
+                          builder:
+                              (controller) => DynamicTabBarWidget(
+                                onTabControllerUpdated: (controller) {
+                                  (controller) {
+                                    debugPrint('TabController updated!');
+                                  };
+                                },
+                                backIcon: const Icon(Icons.arrow_back),
+                                nextIcon: const Icon(Icons.arrow_forward),
+                                isScrollable: true,
+                                labelColor: theme.onTertiary,
+                                indicatorColor: theme.onTertiary,
+                                dividerColor: theme.onPrimaryContainer,
+                                dynamicTabs:
+                                    <TabData>[
+                                      TabData(
+                                        index: 0,
+                                        title: Tab(text: "Friends"),
+                                        content: FriendsWidget(),
+                                      ),
+                                      TabData(
+                                        index: 3,
+                                        title: Tab(text: "Add Friend"),
+                                        content: AddFriend(),
+                                      ),
+                                      TabData(
+                                        index: 1,
+                                        title: Tab(text: "Requests Sent"),
+                                        content: RequestsSent(),
+                                      ),
+                                      TabData(
+                                        index: 2,
+                                        title: Tab(text: "Requests Received"),
+                                        content: RequestsReceived(),
+                                      ),
+                                    ].reversed.toList(),
+                              ),
+                        ),
+                      ),
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: theme.onPrimary,
+                          border: Border(
+                            top: BorderSide(color: theme.onPrimaryContainer),
+                          ),
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            color: Colors.red.shade100,
+                            onPressed: () => Get.back(),
+                            icon: Icon(Icons.close, color: Colors.red),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

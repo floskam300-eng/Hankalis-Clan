@@ -1,11 +1,17 @@
+// ignore_for_file: deprecated_member_use
+import 'dart:html' as html;
+
+import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
 import "package:hankalis_clan/const.dart";
 import "package:hankalis_clan/controller/homepage_controller.dart";
 import "package:hankalis_clan/controller/side_bar_controller.dart";
+import "package:hankalis_clan/services/services.dart";
 import "package:hankalis_clan/widgets/change_themes_buttons.dart";
 import "package:hankalis_clan/widgets/side_bar_item.dart";
+import "package:toastification/toastification.dart";
 
 class SideBar extends StatelessWidget {
   const SideBar({super.key});
@@ -106,7 +112,6 @@ class SideBar extends StatelessWidget {
                             color: theme.onSecondary,
                             boxShadow: [
                               BoxShadow(
-                                // ignore: deprecated_member_use
                                 color: Colors.black.withOpacity(0.5),
                                 blurRadius: 20,
                                 spreadRadius: 2,
@@ -149,10 +154,18 @@ class SideBar extends StatelessWidget {
                                   child:
                                       homepageController.user['photoUrl'] !=
                                               null
-                                          ? Image.network(
-                                            homepageController.user['photoUrl'],
+                                          ? CachedNetworkImage(
                                             height: 40,
                                             width: 40,
+                                            imageUrl:
+                                                homepageController
+                                                    .user['photoUrl'],
+                                            placeholder:
+                                                (context, url) =>
+                                                    CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
                                           )
                                           : Image.asset(
                                             "../assets/user.png",
@@ -165,7 +178,18 @@ class SideBar extends StatelessWidget {
                               MouseRegion(
                                 cursor: SystemMouseCursors.click,
                                 child: GestureDetector(
-                                  onTap: () {},
+                                  onTap: () async {
+                                    await Services.storage.remove("token");
+                                    html.window.location.href = '/';
+                                    toastification.show(
+                                      title: Text("Token removed!"),
+                                      type: ToastificationType.success,
+                                      style: ToastificationStyle.fillColored,
+                                      autoCloseDuration: const Duration(
+                                        seconds: 5,
+                                      ),
+                                    );
+                                  },
                                   child: Container(
                                     height: 50,
                                     decoration: BoxDecoration(

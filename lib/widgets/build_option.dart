@@ -25,7 +25,7 @@ class BuildOption extends StatelessWidget {
                       isSelected
                           ? Theme.of(context).colorScheme.onSecondary
                           : Theme.of(context).colorScheme.onPrimary,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
                 child: Center(
                   child: Text(

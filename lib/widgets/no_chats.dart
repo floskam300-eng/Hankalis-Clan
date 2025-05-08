@@ -13,11 +13,7 @@ class NoChats extends StatelessWidget {
           children: [
             Text(
               "No chats opend.",
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
+              style: TextStyle(color: Colors.grey.shade700, fontSize: 30),
             ),
             Text(
               "choose chat from the right side.",

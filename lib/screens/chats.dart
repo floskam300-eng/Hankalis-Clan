@@ -1,8 +1,8 @@
 import 'package:bubble/bubble.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/const.dart';
-import 'package:hankalis_clan/controller/chats_controller.dart';
 import 'package:hankalis_clan/controller/side_bar_controller.dart';
 import 'package:hankalis_clan/widgets/custom_icon.dart';
 import 'package:hankalis_clan/widgets/message_field.dart';
@@ -19,7 +19,6 @@ class Chats extends StatelessWidget {
     final bool isLoading = false;
     final bool isPause = true;
     final theme = Theme.of(context).colorScheme;
-    final chatsController = Get.find<ChatsController>();
     return GetBuilder<SideBarController>(
       builder:
           (controller) => Expanded(
@@ -35,11 +34,27 @@ class Chats extends StatelessWidget {
                         child: ListTile(
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
-                            child: Image.asset(
-                              controller.selectedChatData.avatarUrl,
-                              height: 40,
-                              width: 40,
-                            ),
+                            child:
+                                controller.selectedChatData.avatarUrl != null
+                                    ? CachedNetworkImage(
+                                      height: 40,
+                                      width: 40,
+                                      imageUrl:
+                                          controller
+                                              .selectedChatData
+                                              .avatarUrl!,
+                                      placeholder:
+                                          (context, url) =>
+                                              CircularProgressIndicator(),
+                                      errorWidget:
+                                          (context, url, error) =>
+                                              Icon(Icons.error),
+                                    )
+                                    : Image.asset(
+                                      'assets/user.png',
+                                      height: 40,
+                                      width: 40,
+                                    ),
                           ),
                           title: Text(
                             overflow: TextOverflow.ellipsis,
@@ -159,7 +174,6 @@ class Chats extends StatelessWidget {
                   children: [
                     Expanded(
                       child: MessageField(
-                        onPressed: () async => await chatsController.readFile(),
                       ),
                     ),
                     SizedBox(width: 10),

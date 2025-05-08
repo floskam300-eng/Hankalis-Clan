@@ -47,6 +47,7 @@ dependencies:
   file_picker: ^10.1.2
   dynamic_tabbar: ^1.0.9
   panara_dialogs: ^0.1.5
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
