@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:hankalis_clan/controller/chats_controller.dart';
 import 'package:hankalis_clan/controller/create_public_room_controller.dart';
-import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
+import 'package:hankalis_clan/controller/friends_side_bar_controller.dart';
 import 'package:hankalis_clan/controller/friends_controller.dart';
 import 'package:hankalis_clan/controller/games_controller.dart';
 import 'package:hankalis_clan/controller/history_news_controller.dart';
@@ -18,7 +18,7 @@ class HomepageBinding extends Bindings {
   void dependencies() {
     Get.lazyPut(() => HomepageController(), fenix: true);
     Get.lazyPut(() => SideBarController(), fenix: true);
-    Get.lazyPut(() => FirendsSideBarController(), fenix: true);
+    Get.lazyPut(() => FriendsSideBarController(), fenix: true);
     Get.lazyPut(() => LeaderboardController(), fenix: true);
     Get.lazyPut(() => NewsActivityController(), fenix: true);
     Get.lazyPut(() => GamesController(), fenix: true);

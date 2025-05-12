@@ -32,7 +32,7 @@ class HomepageController extends GetxController {
   }
 
   void connectToServer() {
-    const serverUrl = 'http://localhost:3000';
+    const serverUrl = 'http://192.168.1.4:3000';
     socket = io.io(
       serverUrl,
       io.OptionBuilder()
@@ -42,13 +42,8 @@ class HomepageController extends GetxController {
           .build(),
     );
 
-    socket.connect().onConnect((_) {
-      debugPrint('Connected to server...');
-    });
-
-    socket.onError((error) {
-      debugPrint('Socket error: $error');
-    });
+    socket.connect().onConnect((_) => debugPrint('Connected to server...'));
+    socket.onError((error) => debugPrint('Socket error: $error'));
 
     socket.on("invalid_credentials", (_) {
       Services.storage.remove("token");

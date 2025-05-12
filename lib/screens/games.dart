@@ -1,4 +1,3 @@
-import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:hankalis_clan/widgets/categories_games.dart';
 import 'package:hankalis_clan/widgets/custom_buttons.dart';
@@ -43,15 +42,6 @@ class Games extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            Bubble(
-                              alignment: Alignment.center,
-                              color: theme.onPrimary,
-                              child: Text(
-                                'YASTERDAY',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 11.0),
-                              ),
-                            ),
                             SizedBox(height: 10),
                             Game(
                               isSender: true,
@@ -73,18 +63,6 @@ class Games extends StatelessWidget {
                               loser: "3mor",
                               winnerScore: 6,
                               loserScore: 5,
-                            ),
-                            SizedBox(height: 10),
-                            Bubble(
-                              margin: BubbleEdges.only(top: 10),
-                              alignment: Alignment.center,
-                              nip: BubbleNip.no,
-                              color: theme.onPrimary,
-                              child: Text(
-                                'TODAY',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 11.0),
-                              ),
                             ),
                             SizedBox(height: 10),
                             Game(

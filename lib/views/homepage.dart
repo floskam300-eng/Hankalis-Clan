@@ -17,6 +17,7 @@ class Homepage extends StatelessWidget {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     Get.find<HomepageController>();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: scaffoldKey,
       drawer: Drawer(child: SideBar()),
       body: LayoutBuilder(

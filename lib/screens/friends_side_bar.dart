@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
+import 'package:hankalis_clan/controller/friends_side_bar_controller.dart';
 import 'package:hankalis_clan/controller/side_bar_controller.dart';
 import 'package:hankalis_clan/model/private_room.dart';
+import 'package:hankalis_clan/model/public_room.dart';
 import 'package:hankalis_clan/screens/create_public_room.dart';
-import 'package:hankalis_clan/widgets/room_item.dart';
+import 'package:hankalis_clan/widgets/private_room_item.dart';
 import 'package:hankalis_clan/widgets/custom_buttons.dart';
 import 'package:hankalis_clan/widgets/custom_icon.dart';
 import 'package:hankalis_clan/screens/friends.dart';
+import 'package:hankalis_clan/widgets/public_room_item.dart';
 
 class FriendsSideBar extends StatelessWidget {
   const FriendsSideBar({super.key});
@@ -16,8 +18,8 @@ class FriendsSideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final searchController = TextEditingController();
-    final FirendsSideBarController friendsSideController =
-        Get.find<FirendsSideBarController>();
+    final FriendsSideBarController friendsSideController =
+        Get.find<FriendsSideBarController>();
     return GetBuilder<SideBarController>(
       builder:
           (controller) => Container(
@@ -49,8 +51,11 @@ class FriendsSideBar extends StatelessWidget {
                               child: TextFormField(
                                 keyboardType: TextInputType.webSearch,
                                 validator:
-                                    (String? search) => friendsSideController
-                                        .valideInputes(search!, InputType.name),
+                                    (String? search) =>
+                                        friendsSideController.validateInputs(
+                                          search!,
+                                          InputType.name,
+                                        ),
                                 controller: searchController,
                                 style: TextStyle(fontSize: 14),
                                 autovalidateMode:
@@ -81,7 +86,7 @@ class FriendsSideBar extends StatelessWidget {
                               onTap: () {
                                 Get.generalDialog(
                                   transitionDuration: Duration(
-                                    milliseconds: 250,
+                                    milliseconds: 150,
                                   ),
                                   transitionBuilder:
                                       (
@@ -89,11 +94,10 @@ class FriendsSideBar extends StatelessWidget {
                                         animation,
                                         secondaryAnimation,
                                         child,
-                                      ) => SlideTransition(
-                                        position: Tween<Offset>(
-                                          begin: const Offset(1, 0),
-                                          end: Offset.zero,
-                                        ).animate(animation),
+                                      ) => Transform.scale(
+                                        origin: Offset(0, 0),
+                                        scale: animation.value,
+                                        alignment: Alignment.bottomCenter,
                                         child: child,
                                       ),
                                   pageBuilder: (_, __, ___) => Friends(),
@@ -107,11 +111,12 @@ class FriendsSideBar extends StatelessWidget {
                         const SizedBox(height: 10),
                         Expanded(
                           child: SingleChildScrollView(
-                            child: GetBuilder<FirendsSideBarController>(
+                            child: GetBuilder<FriendsSideBarController>(
                               builder:
                                   (controller) => Column(
                                     children: [
-                                      controller.rooms.isEmpty
+                                      controller.privateRooms.isEmpty &&
+                                              controller.publicRooms.isEmpty
                                           ? Center(
                                             child: ListTile(
                                               title: Text(
@@ -136,25 +141,69 @@ class FriendsSideBar extends StatelessWidget {
                                             children: [
                                               for (
                                                 int index = 0;
-                                                index < controller.rooms.length;
+                                                index <
+                                                    controller
+                                                        .privateRooms
+                                                        .length;
                                                 index++
                                               )
-                                                RoomItem(
+                                                PrivateRoomItem(
                                                   room: PrivateRoom(
                                                     id:
                                                         controller
-                                                            .rooms[index]['id'],
+                                                            .privateRooms[index]['id'],
                                                     name:
                                                         controller
-                                                            .rooms[index]['name'],
+                                                            .privateRooms[index]['name'],
                                                     photoUrl:
                                                         controller
-                                                            .rooms[index]['photoUrl'],
+                                                            .privateRooms[index]['photoUrl'],
                                                     type:
                                                         controller
-                                                            .rooms[index]['type'],
+                                                            .privateRooms[index]['type'],
                                                   ),
                                                   index: index,
+                                                ),
+                                              Divider(
+                                                color: theme.onPrimaryContainer,
+                                              ),
+                                              for (
+                                                int index = 0;
+                                                index <
+                                                    controller
+                                                        .publicRooms
+                                                        .length;
+                                                index++
+                                              )
+                                                PublicRoomItem(
+                                                  room: PublicRoom(
+                                                    id:
+                                                        controller
+                                                            .publicRooms[index]['id'],
+                                                    name:
+                                                        controller
+                                                            .publicRooms[index]['name'],
+                                                    description:
+                                                        controller
+                                                            .publicRooms[index]['description'],
+                                                    type:
+                                                        controller
+                                                            .publicRooms[index]['type'],
+                                                    admin:
+                                                        controller
+                                                            .publicRooms[index]['admin'],
+                                                    picture:
+                                                        controller
+                                                            .publicRooms[index]['picture'],
+                                                    participants:
+                                                        controller
+                                                            .publicRooms[index]['participants'],
+                                                  ),
+                                                  index:
+                                                      controller
+                                                          .privateRooms
+                                                          .length +
+                                                      index,
                                                 ),
                                             ],
                                           ),
@@ -169,18 +218,17 @@ class FriendsSideBar extends StatelessWidget {
                         CustomButtons(
                           onTap: () {
                             Get.generalDialog(
-                              transitionDuration: Duration(milliseconds: 250),
+                              transitionDuration: Duration(milliseconds: 150),
                               transitionBuilder:
                                   (
                                     context,
                                     animation,
                                     secondaryAnimation,
                                     child,
-                                  ) => SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(1, 0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
+                                  ) => Transform.scale(
+                                    origin: Offset(0, 0),
+                                    scale: animation.value,
+                                    alignment: Alignment.bottomCenter,
                                     child: child,
                                   ),
                               pageBuilder:

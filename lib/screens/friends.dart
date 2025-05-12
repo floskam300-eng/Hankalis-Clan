@@ -1,7 +1,7 @@
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hankalis_clan/controller/firends_side_bar_controller.dart';
+import 'package:hankalis_clan/controller/friends_side_bar_controller.dart';
 import 'package:hankalis_clan/widgets/add_friend.dart';
 import 'package:hankalis_clan/widgets/friends_widget.dart';
 import 'package:hankalis_clan/widgets/requests_received.dart';
@@ -31,12 +31,13 @@ class Friends extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               child: Scaffold(
+                resizeToAvoidBottomInset: false,
                 backgroundColor: Colors.transparent,
                 body: SafeArea(
                   child: Column(
                     children: [
                       Expanded(
-                        child: GetBuilder<FirendsSideBarController>(
+                        child: GetBuilder<FriendsSideBarController>(
                           builder:
                               (controller) => DynamicTabBarWidget(
                                 onTabControllerUpdated: (controller) {

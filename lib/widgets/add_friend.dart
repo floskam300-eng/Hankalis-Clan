@@ -13,6 +13,7 @@ class AddFriend extends StatelessWidget {
     final controller = Get.find<FriendsController>();
     final formKey = GlobalKey<FormState>();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       body: Form(
         key: formKey,

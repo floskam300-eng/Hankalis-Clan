@@ -20,6 +20,7 @@ class Authentication extends StatelessWidget {
     final passwordController = TextEditingController();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Form(
         key: formKey,
         child: LayoutBuilder(
@@ -55,7 +56,7 @@ class Authentication extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  "Chat app for Hankalis Clan memebers and friends to have some fun together",
+                                  "Chat app for Hankalis Clan members and friends to have some fun together",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w100,
                                     fontSize: 12,
@@ -81,251 +82,265 @@ class Authentication extends StatelessWidget {
                           builder: (context, constraints) {
                             final height = constraints.maxHeight;
                             final width = constraints.maxWidth;
-                            return Container(
-                              alignment: Alignment.center,
-                              height: height * 0.9,
-                              width: width < 650 ? width * 0.7 : width * 0.4,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                          100,
-                                        ),
-                                        child: Image.asset(
-                                          "../assets/hankalis_logo.webp",
-                                          height: 50,
-                                          width: 50,
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        "Hankalis Clan",
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 20),
-                                  Container(
-                                    height: 50,
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.onPrimary,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: GetBuilder<AuthenticationController>(
-                                      builder:
-                                          (controller) => Row(
-                                            children: [
-                                              Expanded(
-                                                child: BuildOption(
-                                                  index:
-                                                      AuthenticationType.login,
-                                                  title: "Sign in",
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: BuildOption(
-                                                  index:
-                                                      AuthenticationType
-                                                          .register,
-                                                  title: "Create account",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  CustomSignButtons(
-                                    title: "Continue with Google",
-                                    asset: '../assets/google.png',
-                                    onTap: () {
-                                      controller.loginWithGoogle();
-                                    },
-                                  ),
-                                  SizedBox(height: 10),
-                                  CustomSignButtons(
-                                    title: "Continue with Facebook",
-                                    asset: '../assets/facebook.png',
-                                    onTap: () {
-                                      controller.loginWithFacebook();
-                                    },
-                                  ),
-                                  SizedBox(height: 20),
-                                  SizedBox(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                            return SingleChildScrollView(
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: height * 0.9,
+                                width: width < 650 ? width * 0.7 : width * 0.4,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        Expanded(
-                                          child: Divider(
-                                            color:
-                                                Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimaryContainer,
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            100,
+                                          ),
+                                          child: Image.asset(
+                                            "../assets/hankalis_logo.webp",
+                                            height: 50,
+                                            width: 50,
                                           ),
                                         ),
-                                        const SizedBox(width: 20),
+                                        SizedBox(width: 10),
                                         Text(
-                                          "OR",
+                                          "Hankalis Clan",
                                           style: TextStyle(
-                                            color:
-                                                Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimaryContainer,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 20),
-                                        Expanded(
-                                          child: Divider(
-                                            color:
-                                                Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimaryContainer,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  GetBuilder<AuthenticationController>(
-                                    builder:
-                                        (controller) =>
-                                            controller.getIndex ==
-                                                    AuthenticationType.register
-                                                ? Column(
+                                    SizedBox(height: 20),
+                                    Container(
+                                      height: 50,
+                                      padding: EdgeInsets.all(3),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimary,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child:
+                                          GetBuilder<AuthenticationController>(
+                                            builder:
+                                                (controller) => Row(
                                                   children: [
-                                                    CustomFields(
-                                                      title: "username",
-                                                      icon: Icon(Icons.person),
-                                                      controller:
-                                                          nameController,
-                                                      validator:
-                                                          (
-                                                            String? name,
-                                                          ) => controller
-                                                              .valideInputes(
-                                                                name!,
-                                                                InputType.name,
-                                                              ),
-                                                      inputType:
-                                                          TextInputType.name,
+                                                    Expanded(
+                                                      child: BuildOption(
+                                                        index:
+                                                            AuthenticationType
+                                                                .login,
+                                                        title: "Sign in",
+                                                      ),
                                                     ),
-                                                    const SizedBox(height: 10),
+                                                    Expanded(
+                                                      child: BuildOption(
+                                                        index:
+                                                            AuthenticationType
+                                                                .register,
+                                                        title: "Create account",
+                                                      ),
+                                                    ),
                                                   ],
-                                                )
-                                                : SizedBox(),
-                                  ),
-                                  CustomFields(
-                                    title: "email",
-                                    icon: Icon(Icons.email),
-                                    controller: emailController,
-                                    validator: (String? email) {
-                                      return controller.valideInputes(
-                                        email!,
-                                        InputType.email,
-                                      );
-                                    },
-                                    inputType: TextInputType.emailAddress,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  CustomFields(
-                                    title: "password",
-                                    icon: Icon(Icons.lock),
-                                    controller: passwordController,
-                                    validator: (String? password) {
-                                      return controller.valideInputes(
-                                        password!,
-                                        InputType.password,
-                                      );
-                                    },
-                                    inputType: TextInputType.visiblePassword,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: GetBuilder<AuthenticationController>(
+                                                ),
+                                          ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    CustomSignButtons(
+                                      title: "Continue with Google",
+                                      asset: '../assets/google.png',
+                                      onTap: () {
+                                        controller.loginWithGoogle();
+                                      },
+                                    ),
+                                    SizedBox(height: 10),
+                                    CustomSignButtons(
+                                      title: "Continue with Facebook",
+                                      asset: '../assets/facebook.png',
+                                      onTap: () {
+                                        controller.loginWithFacebook();
+                                      },
+                                    ),
+                                    SizedBox(height: 20),
+                                    SizedBox(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Divider(
+                                              color:
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimaryContainer,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 20),
+                                          Text(
+                                            "OR",
+                                            style: TextStyle(
+                                              color:
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimaryContainer,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 20),
+                                          Expanded(
+                                            child: Divider(
+                                              color:
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimaryContainer,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    GetBuilder<AuthenticationController>(
                                       builder:
                                           (controller) =>
                                               controller.getIndex ==
-                                                      AuthenticationType.login
-                                                  ? TextButton(
-                                                    onPressed:
-                                                        () => Get.toNamed(
-                                                          "/auth/forgot-password",
+                                                      AuthenticationType
+                                                          .register
+                                                  ? Column(
+                                                    children: [
+                                                      CustomFields(
+                                                        title: "username",
+                                                        icon: Icon(
+                                                          Icons.person,
                                                         ),
-                                                    child: Text(
-                                                      "Forgot password?",
-                                                      style: TextStyle(
-                                                        color: theme.onTertiary,
+                                                        controller:
+                                                            nameController,
+                                                        validator:
+                                                            (
+                                                              String? name,
+                                                            ) => controller
+                                                                .validInputs(
+                                                                  name!,
+                                                                  InputType
+                                                                      .name,
+                                                                ),
+                                                        inputType:
+                                                            TextInputType.name,
                                                       ),
-                                                    ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                    ],
                                                   )
                                                   : SizedBox(),
                                     ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  GetBuilder<AuthenticationController>(
-                                    builder:
-                                        (controller) => MaterialButton(
-                                          onPressed: () {
-                                            if (formKey.currentState!
-                                                .validate()) {
-                                              if (controller.getIndex ==
-                                                  AuthenticationType.login) {
-                                                controller.login(
-                                                  credentials: (
-                                                    emailController.text,
-                                                    passwordController.text,
-                                                  ),
-                                                );
-                                              } else {
-                                                controller.register(
-                                                  credentials: (
-                                                    nameController.text,
-                                                    emailController.text,
-                                                    passwordController.text,
-                                                  ),
-                                                );
+                                    CustomFields(
+                                      title: "email",
+                                      icon: Icon(Icons.email),
+                                      controller: emailController,
+                                      validator: (String? email) {
+                                        return controller.validInputs(
+                                          email!,
+                                          InputType.email,
+                                        );
+                                      },
+                                      inputType: TextInputType.emailAddress,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    CustomFields(
+                                      title: "password",
+                                      icon: Icon(Icons.lock),
+                                      controller: passwordController,
+                                      validator: (String? password) {
+                                        return controller.validInputs(
+                                          password!,
+                                          InputType.password,
+                                        );
+                                      },
+                                      inputType: TextInputType.visiblePassword,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: GetBuilder<
+                                        AuthenticationController
+                                      >(
+                                        builder:
+                                            (controller) =>
+                                                controller.getIndex ==
+                                                        AuthenticationType.login
+                                                    ? TextButton(
+                                                      onPressed:
+                                                          () => Get.toNamed(
+                                                            "/auth/forgot-password",
+                                                          ),
+                                                      child: Text(
+                                                        "Forgot password?",
+                                                        style: TextStyle(
+                                                          color:
+                                                              theme.onTertiary,
+                                                        ),
+                                                      ),
+                                                    )
+                                                    : SizedBox(),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    GetBuilder<AuthenticationController>(
+                                      builder:
+                                          (controller) => MaterialButton(
+                                            onPressed: () {
+                                              if (formKey.currentState!
+                                                  .validate()) {
+                                                if (controller.getIndex ==
+                                                    AuthenticationType.login) {
+                                                  controller.login(
+                                                    credentials: (
+                                                      emailController.text,
+                                                      passwordController.text,
+                                                    ),
+                                                  );
+                                                } else {
+                                                  controller.register(
+                                                    credentials: (
+                                                      nameController.text,
+                                                      emailController.text,
+                                                      passwordController.text,
+                                                    ),
+                                                  );
+                                                }
                                               }
-                                            }
-                                          },
-                                          height: 50,
-                                          minWidth:
-                                              width < 650
-                                                  ? width * 0.7
-                                                  : width * 0.4,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(10),
+                                            },
+                                            height: 50,
+                                            minWidth:
+                                                width < 650
+                                                    ? width * 0.7
+                                                    : width * 0.4,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
+                                            ),
+                                            color: theme.onTertiary,
+                                            child: Text(
+                                              "Sign in with Hankalis",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
-                                          color: theme.onTertiary,
-                                          child: Text(
-                                            "Sign in with Hankalis",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                  ),
-                                ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },

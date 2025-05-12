@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/controller/homepage_controller.dart';
@@ -5,29 +7,32 @@ import 'package:hankalis_clan/services/room_service.dart';
 
 enum InputType { name, email, password }
 
-class FirendsSideBarController extends GetxController {
+class FriendsSideBarController extends GetxController {
   final homepageController = Get.find<HomepageController>();
-
   late final RoomService roomServices;
-  List<Map<String, dynamic>> rooms = [];
+
+  List<Map<String, dynamic>> privateRooms = [];
+  List<Map<String, dynamic>> publicRooms = [];
 
   @override
   void onInit() {
     super.onInit();
-    initSerives();
+    initServices();
   }
 
-  void initSerives() {
-    initialaizeRoomServices();
+  void initServices() {
+    initializeRoomServices();
     initializeRoomCreated();
     initializePrivateRooms();
+    initializePublicRoomCreated();
+    initializePublicRooms();
   }
 
-  void initialaizeRoomServices() {
+  void initializeRoomServices() {
     roomServices = RoomService(homepageController.socket);
   }
 
-  String? valideInputes(String input, InputType type) {
+  String? validateInputs(String input, InputType type) {
     if (type == InputType.name) {
       if (input.trim().isEmpty ||
           input.length != "6812f9bd71d72857954a2baf".length) {
@@ -57,8 +62,8 @@ class FirendsSideBarController extends GetxController {
     roomServices.onRoomCreated((room) {
       try {
         if (room is Map<String, dynamic> && room.containsKey('id')) {
-          if (!rooms.any((element) => element['id'] == room['id'])) {
-            rooms.add(room);
+          if (!privateRooms.any((element) => element['id'] == room['id'])) {
+            privateRooms.add(room);
             update();
           }
         } else {
@@ -74,7 +79,7 @@ class FirendsSideBarController extends GetxController {
     roomServices.emitPrivateRooms(homepageController.user['id']);
     roomServices.onPrivateRooms((rooms) {
       try {
-        this.rooms.addAll(
+        privateRooms.addAll(
           (rooms as List).map((e) => e as Map<String, dynamic>),
         );
         update();
@@ -83,5 +88,41 @@ class FirendsSideBarController extends GetxController {
       }
     });
   }
-  
+
+  void initializePublicRooms() {
+    roomServices.emitPublicRooms(homepageController.user['id']);
+    roomServices.onPublicRooms((rooms) {
+      try {
+        for (final Map<String, dynamic> room in rooms) {
+          room['picture'] = base64Decode(room['picture']);
+        }
+        publicRooms.addAll(
+          (rooms as List).map((e) => e as Map<String, dynamic>),
+        );
+        update();
+      } catch (error) {
+        debugPrint("Error in initializePublicRooms: $error");
+      }
+    });
+  }
+
+  void initializePublicRoomCreated() {
+    roomServices.onCreatePublicRoom((room) {
+      try {
+        if (room is Map<String, dynamic> && room.containsKey('id')) {
+          if (!publicRooms.any((element) => element['id'] == room['id'])) {
+            room['picture'] = base64Decode(room['picture']);
+            publicRooms.add(room);
+            update();
+          } else {
+            debugPrint('Already exists');
+          }
+        } else {
+          throw Exception("Invalid room data");
+        }
+      } catch (error) {
+        debugPrint("Error: $error");
+      }
+    });
+  }
 }

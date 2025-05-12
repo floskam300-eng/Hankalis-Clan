@@ -2,50 +2,30 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/const.dart';
-import 'package:hankalis_clan/controller/side_bar_controller.dart';
-import 'package:hankalis_clan/model/chat.dart';
 import 'package:hankalis_clan/model/private_room.dart';
 import 'package:hankalis_clan/views/chat_view.dart';
 
-class RoomItem extends StatelessWidget {
-  const RoomItem({super.key, required this.room, required this.index});
+class PrivateRoomItem extends StatelessWidget {
+  const PrivateRoomItem({super.key, required this.room, required this.index});
 
   final PrivateRoom room;
   final int index;
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<SideBarController>();
-    final isSelected = controller.selectedChat == index;
     final theme = Theme.of(context).colorScheme;
     return Column(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           child: Material(
-            color: isSelected ? theme.onPrimaryContainer : Colors.transparent,
+            color: Colors.transparent,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: ListTile(
                 onTap: () {
-                  if (room.photoUrl != null) {
-                    controller.setSelectedChat(
-                      index,
-                      Chat(
-                        name: room.name,
-                        avatarUrl: room.photoUrl!,
-                        message: "",
-                        numOfMsgs: 0,
-                      ),
-                    );
-                  } else {
-                    controller.setSelectedChat(
-                      index,
-                      Chat(name: room.name, message: "", numOfMsgs: 0),
-                    );
-                  }
                   if (checkDeviceSize() == DeviceType.mobile) {
                     Get.to(() => ChatView());
                   }
@@ -65,6 +45,8 @@ class RoomItem extends StatelessWidget {
                   child:
                       room.photoUrl != null
                           ? CachedNetworkImage(
+                            height: 40,
+                            width: 40,
                             imageUrl: room.photoUrl!,
                             placeholder:
                                 (context, url) => CircularProgressIndicator(),

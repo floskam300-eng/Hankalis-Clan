@@ -14,13 +14,13 @@ enum AuthenticationType { login, register }
 
 class AuthenticationController extends GetxController {
   AuthenticationType _selectedIndex = AuthenticationType.login;
-  bool _isVisibile = true;
+  bool _isVisible = true;
 
   get getIndex => _selectedIndex;
-  get getIsVisibile => _isVisibile;
+  get getIsVisible => _isVisible;
 
-  set isVisibile(bool value) {
-    _isVisibile = value;
+  set isVisible(bool value) {
+    _isVisible = value;
     update();
   }
 
@@ -29,7 +29,7 @@ class AuthenticationController extends GetxController {
     update();
   }
 
-  String? valideInputes(String input, InputType type) {
+  String? validInputs(String input, InputType type) {
     if (type == InputType.name) {
       if (input.trim().isEmpty) {
         return "Name can't be empty.";
@@ -84,12 +84,12 @@ class AuthenticationController extends GetxController {
   }
 
   Future<void> loginWithGoogle() async {
-    const url = 'http://localhost:3000/api/auth/login/google';
+    const url = 'http://192.168.1.4:3000/api/auth/login/google';
     html.window.location.href = url;
   }
 
   Future<void> loginWithFacebook() async {
-    const url = 'http://localhost:3000/api/auth/login/facebook';
+    const url = 'http://192.168.1.4:3000/api/auth/login/facebook';
     html.window.location.href = url;
   }
 

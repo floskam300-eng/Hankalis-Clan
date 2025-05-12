@@ -10,6 +10,7 @@ class RequestsReceived extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       body: Align(
         alignment: Alignment.topLeft,

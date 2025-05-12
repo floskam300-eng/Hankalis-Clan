@@ -24,15 +24,15 @@ class CustomFields extends StatelessWidget {
     return GetBuilder<AuthenticationController>(
       builder: (controller) => TextFormField(
         keyboardType: inputType,
-        obscureText: inputType == TextInputType.visiblePassword ? controller.getIsVisibile : false,
+        obscureText: inputType == TextInputType.visiblePassword ? controller.getIsVisible : false,
         validator: validator ?? (p0) => null,
         controller: this.controller ?? TextEditingController(),
         style: TextStyle(fontSize: 14),
         decoration: InputDecoration(
           hintText: title,
           suffixIcon: inputType == TextInputType.visiblePassword ? IconButton(onPressed: () {
-            controller.isVisibile = !controller.getIsVisibile;
-          }, icon: Icon(controller.getIsVisibile ? Icons.visibility_off : Icons.visibility)) : null,
+            controller.isVisible = !controller.getIsVisible;
+          }, icon: Icon(controller.getIsVisible ? Icons.visibility_off : Icons.visibility)) : null,
           suffixIconColor: theme.onPrimaryContainer,
           hintStyle: TextStyle(color: theme.onPrimaryContainer, fontSize: 14),
           prefixIcon: icon,

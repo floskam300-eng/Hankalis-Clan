@@ -13,6 +13,7 @@ class FriendsWidget extends StatelessWidget {
     final FriendsController friendsController =
         Get.find<FriendsController>();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       body: Center(
         child: SafeArea(
