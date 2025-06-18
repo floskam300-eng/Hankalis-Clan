@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class ViewImagCotroller extends GetxController {
+class ViewImageController extends GetxController {
   late String _photo;
 
   get photo => _photo;

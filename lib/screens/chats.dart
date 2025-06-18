@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hankalis_clan/const.dart';
 import 'package:hankalis_clan/controller/side_bar_controller.dart';
-import 'package:hankalis_clan/widgets/custom_icon.dart';
-import 'package:hankalis_clan/widgets/message_field.dart';
 
 class Chats extends StatelessWidget {
   const Chats({super.key});
@@ -16,49 +13,67 @@ class Chats extends StatelessWidget {
           (controller) => Expanded(
             child: Column(
               children: [
-                SizedBox(
+                Container(
+                  height: 80,
+                  padding: EdgeInsets.all(15),
                   width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: theme.onPrimary,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            CustomIcon(icon: Icons.chat),
-                            SizedBox(width: 10),
-                            CustomIcon(icon: Icons.video_call),
-                            SizedBox(width: 10),
-                            CustomIcon(icon: Icons.phone),
-                          ],
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                        child: Image.asset("../../assets/my_photo.jpg"),
+                      ),
+                      SizedBox(width: 10),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Omar Elshamy",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "Online",
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Expanded(child: SizedBox()),
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: theme.onSecondary,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: Center(
+                              child: Image.asset(
+                                "../../assets/more.png",
+                                color: Colors.grey.shade200,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                Divider(color: theme.onPrimaryContainer),
-                Expanded(
-                  child: Padding(
-                    padding:
-                        checkDeviceSize() == DeviceType.mobile
-                            ? EdgeInsets.all(0)
-                            : EdgeInsets.all(20),
-                    child: Column(children: [
-                        
-                      ],
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Expanded(child: MessageField()),
-                    SizedBox(width: 10),
-                    CustomIcon(icon: Icons.send),
-                  ],
-                ),
-              ],
+                ),              ],
             ),
           ),
     );

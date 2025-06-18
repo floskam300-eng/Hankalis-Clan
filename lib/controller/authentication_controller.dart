@@ -3,6 +3,7 @@ import 'dart:html' as html;
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:hankalis_clan/const.dart';
 
 import 'package:hankalis_clan/services/auth_service.dart';
 import 'package:hankalis_clan/services/services.dart';
@@ -84,12 +85,12 @@ class AuthenticationController extends GetxController {
   }
 
   Future<void> loginWithGoogle() async {
-    const url = 'http://192.168.1.4:3000/api/auth/login/google';
+    const url = 'http://$DOMAIN/api/auth/login/google';
     html.window.location.href = url;
   }
 
   Future<void> loginWithFacebook() async {
-    const url = 'http://192.168.1.4:3000/api/auth/login/facebook';
+    const url = 'http://$DOMAIN/api/auth/login/facebook';
     html.window.location.href = url;
   }
 

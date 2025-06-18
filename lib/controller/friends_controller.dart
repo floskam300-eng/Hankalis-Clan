@@ -12,7 +12,6 @@ class FriendsController extends GetxController {
 
   late final FriendsService friendsService;
 
-
     final List<Map<String, dynamic>> friends = [];
   List<Map<String, dynamic>> filteredFriends = [];
 

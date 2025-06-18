@@ -4,6 +4,7 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:hankalis_clan/const.dart';
 import 'package:hankalis_clan/services/services.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:toastification/toastification.dart';
@@ -32,7 +33,7 @@ class HomepageController extends GetxController {
   }
 
   void connectToServer() {
-    const serverUrl = 'http://192.168.1.4:3000';
+    const serverUrl = 'http://$DOMAIN';
     socket = io.io(
       serverUrl,
       io.OptionBuilder()
