@@ -9,7 +9,7 @@ class DarkTheme {
       onSecondary: Color.fromRGBO(35, 38, 39, 1),
       onSecondaryContainer: Color.fromRGBO(109, 114, 119, 1),
       onPrimaryContainer: Color.fromRGBO(52, 56, 57, 1),
-      onTertiary: Color.fromRGBO(0, 132, 255, 1),
+      onTertiary: Colors.green[800],
       onTertiaryContainer: Color.fromRGBO(51, 50, 55, 1),
       onInverseSurface: Color.fromRGBO(35, 37, 39, 1),
     ),

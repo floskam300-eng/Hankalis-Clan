@@ -108,7 +108,6 @@ class FriendsSideBar extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Divider(color: theme.onPrimaryContainer),
-                        const SizedBox(height: 10),
                         Expanded(
                           child: SingleChildScrollView(
                             child: GetBuilder<FriendsSideBarController>(
