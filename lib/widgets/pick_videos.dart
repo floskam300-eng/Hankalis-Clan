@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/controller/chats_controller.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:hankalis_clan/controller/pick_videos_controller.dart';
+import 'package:hankalis_clan/controller/animations_controller.dart';
+import 'package:hankalis_clan/widgets/emojis_widget.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
 import 'package:video_player/video_player.dart';
 
@@ -104,35 +104,77 @@ class PickVideos extends StatelessWidget {
                                             VideoPlayer(
                                               controller.videoPlayerController!,
                                             ),
-                                            MouseRegion(
-                                              cursor: SystemMouseCursors.click,
-                                              onEnter:
-                                                  (event) =>
-                                                      controller.isHovered =
-                                                          true,
-                                              onExit:
-                                                  (event) =>
-                                                      controller.isHovered =
-                                                          false,
-                                              child: Container(
-                                                margin: EdgeInsets.only(
-                                                  bottom: 15,
-                                                ),
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.bottomCenter,
-                                                  child: Opacity(
-                                                    opacity:
-                                                        controller.isHovered
-                                                            ? 1
-                                                            : 0.5,
-                                                    child: Image.asset(
-                                                      "../../assets/play-button.png",
-                                                      height: 32,
-                                                      width: 32,
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                bottom: 15,
+                                                left: 15,
+                                              ),
+                                              child: Align(
+                                                alignment: Alignment.bottomLeft,
+                                                child: Opacity(
+                                                  opacity: 0.5,
+                                                  child: Text(
+                                                    controller.videoTime() ??
+                                                        "00:00",
+                                                    style: TextStyle(
                                                       color: Colors.white,
+                                                      fontSize: 20,
                                                     ),
                                                   ),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                bottom: 15,
+                                              ),
+                                              child: Align(
+                                                alignment:
+                                                    Alignment.bottomCenter,
+                                                child: GetBuilder<
+                                                  AnimationsController
+                                                >(
+                                                  builder:
+                                                      (
+                                                        thumbnailController,
+                                                      ) => Opacity(
+                                                        opacity:
+                                                            thumbnailController
+                                                                    .isHovered
+                                                                ? 1
+                                                                : 0.5,
+                                                        child: MouseRegion(
+                                                          cursor:
+                                                              SystemMouseCursors
+                                                                  .click,
+                                                          onEnter:
+                                                              (event) =>
+                                                                  thumbnailController
+                                                                          .isHovered =
+                                                                      true,
+                                                          onExit:
+                                                              (event) =>
+                                                                  thumbnailController
+                                                                          .isHovered =
+                                                                      false,
+                                                          child: GestureDetector(
+                                                            onTap:
+                                                                () =>
+                                                                    controller
+                                                                        .playVideo(),
+                                                            child: Image.asset(
+                                                              controller
+                                                                      .isPlayed
+                                                                  ? "../../assets/pause-button.png"
+                                                                  : "../../assets/play-button.png",
+                                                              height: 32,
+                                                              width: 32,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
                                                 ),
                                               ),
                                             ),
@@ -168,135 +210,44 @@ class PickVideos extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                OverlayPortal(
-                                  controller: pickVideoController.overlayPortal,
-                                  overlayChildBuilder: (context) {
-                                    final RenderBox renderBox =
-                                        pickVideoController
-                                                .emojisBtnKey
-                                                .currentContext!
-                                                .findRenderObject()
-                                            as RenderBox;
-                                    final Offset offset = renderBox
-                                        .localToGlobal(Offset.zero);
-                                    return Stack(
-                                      children: [
-                                        Positioned.fill(
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              pickVideoController.overlayPortal
-                                                  .hide();
-                                            },
-                                            behavior: HitTestBehavior.opaque,
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: offset.dy - 300,
-                                          left: offset.dx,
-                                          child: Material(
-                                            elevation: 10,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(15),
-                                            ),
-                                            child: SizedBox(
-                                              height: 300,
-                                              width: 350,
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(15),
-                                                ),
-                                                child: EmojiPicker(
-                                                  onEmojiSelected:
-                                                      (
-                                                        Category? category,
-                                                        Emoji emoji,
-                                                      ) => pickVideoController
-                                                          .onEmojiSelected(
-                                                            emoji,
-                                                          ),
-                                                  onBackspacePressed: () {},
-                                                  config: Config(
-                                                    height: 50,
-                                                    checkPlatformCompatibility:
-                                                        true,
-                                                    emojiViewConfig: EmojiViewConfig(
-                                                      gridPadding:
-                                                          const EdgeInsets.all(
-                                                            5,
-                                                          ),
-                                                      recentsLimit: 15,
-                                                      replaceEmojiOnLimitExceed:
-                                                          true,
-                                                      loadingIndicator: Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      ),
-                                                      backgroundColor:
-                                                          theme.onSecondary,
-                                                      emojiSizeMax:
-                                                          20 *
-                                                          (foundation.kIsWeb
-                                                              ? 1.30
-                                                              : 1.0),
-                                                    ),
-                                                    viewOrderConfig:
-                                                        const ViewOrderConfig(
-                                                          top:
-                                                              EmojiPickerItem
-                                                                  .categoryBar,
-                                                          middle:
-                                                              EmojiPickerItem
-                                                                  .emojiView,
-                                                        ),
-                                                    skinToneConfig:
-                                                        const SkinToneConfig(),
-                                                    categoryViewConfig:
-                                                        CategoryViewConfig(
-                                                          backgroundColor:
-                                                              theme.onSecondary,
-                                                          dividerColor:
-                                                              theme
-                                                                  .onPrimaryContainer,
-                                                          iconColorSelected:
-                                                              theme.onTertiary,
-                                                          indicatorColor:
-                                                              theme.onTertiary,
-                                                        ),
-                                                    bottomActionBarConfig:
-                                                        BottomActionBarConfig(
-                                                          enabled: false,
-                                                        ),
-                                                    searchViewConfig:
-                                                        const SearchViewConfig(),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
+                                EmojisWidget(
+                                  emojisBtnKey:
+                                      pickVideoController.emojisBtnKey,
+                                  overlayPortalController:
+                                      pickVideoController.overlayPortal,
+                                  onEmojiSelected:
+                                      (category, emoji) => pickVideoController
+                                          .onEmojiSelected(emoji),
                                 ),
-                                GetBuilder<PickVideosController>(
+                                GetBuilder<AnimationsController>(
                                   builder:
                                       (controller) => MouseRegion(
                                         cursor: SystemMouseCursors.click,
-                                        onHover:
-                                            (_) => controller.isEntered = true,
-                                        onExit:
-                                            (_) => controller.isEntered = false,
+                                        onHover: (_) {
+                                          controller.isEntered = true;
+                                          controller.hoveredIndex = 1;
+                                        },
+                                        onExit: (_) {
+                                          controller.isEntered = false;
+                                          controller.hoveredIndex = -1;
+                                        },
                                         child: GestureDetector(
                                           onTap:
                                               () =>
-                                                  controller.overlayPortal
+                                                  pickVideoController
+                                                      .overlayPortal
                                                       .show(),
                                           child: Container(
-                                            key: controller.emojisBtnKey,
+                                            key:
+                                                pickVideoController
+                                                    .emojisBtnKey,
                                             padding: const EdgeInsets.all(10),
                                             decoration: BoxDecoration(
                                               color:
-                                                  controller.isEntered
+                                                  controller.isEntered &&
+                                                          controller
+                                                                  .hoveredIndex ==
+                                                              1
                                                       ? theme.onPrimaryContainer
                                                       : theme.onSecondary,
                                               borderRadius: BorderRadius.all(
@@ -383,137 +334,157 @@ class PickVideos extends StatelessWidget {
                                       controller:
                                           pickVideoController.scrollController,
                                       scrollDirection: Axis.horizontal,
-                                      child: GetBuilder<ChatsController>(
-                                        builder:
-                                            (controller) => Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                ...List.generate(controller.pickedFiles.length, (
-                                                  index,
-                                                ) {
-                                                  final isValidIndex =
-                                                      index <
-                                                      chatsController
-                                                          .pickedFiles
-                                                          .length;
-                                                  return isValidIndex
-                                                      ? MouseRegion(
-                                                        cursor:
-                                                            SystemMouseCursors
-                                                                .click,
-                                                        child: GestureDetector(
-                                                          onTap: () {
-                                                            if (index !=
-                                                                pickVideoController
-                                                                    .pickedFileIndex) {
-                                                              if (index >=
-                                                                  pickVideoController
-                                                                      .captions
-                                                                      .length) {
-                                                                pickVideoController
-                                                                    .captions
-                                                                    .add({});
-                                                              }
-                                                              pickVideoController
-                                                                      .controller
-                                                                      .text =
-                                                                  pickVideoController
-                                                                      .captions[index]['caption'] ??
-                                                                  '';
-                                                              pickVideoController
-                                                                  .setPickedFileIndex(
-                                                                    index,
-                                                                  );
-                                                            }
-                                                          },
-                                                          child: GetBuilder<
-                                                            PickVideosController
-                                                          >(
-                                                            builder:
-                                                                (
-                                                                  controller,
-                                                                ) => Container(
-                                                                  height: 60,
-                                                                  width: 50,
-                                                                  margin:
-                                                                      EdgeInsets.only(
-                                                                        right:
-                                                                            5,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ...List.generate(chatsController.pickedFiles.length, (
+                                            index,
+                                          ) {
+                                            final files =
+                                                chatsController.pickedFiles;
+                                            final captions =
+                                                pickVideoController.captions;
+                                            final isValidFileIndex =
+                                                index >= 0 &&
+                                                index < files.length;
+                                            return isValidFileIndex
+                                                ? MouseRegion(
+                                                  cursor:
+                                                      SystemMouseCursors.click,
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      pickVideoController
+                                                          .isPlayed = false;
+                                                      if (index !=
+                                                          pickVideoController
+                                                              .pickedFileIndex) {
+                                                        // Ensure captions list is long enough
+                                                        while (captions
+                                                                .length <=
+                                                            index) {
+                                                          captions.add({});
+                                                        }
+                                                        final caption =
+                                                            captions[index]['caption'] ??
+                                                            '';
+                                                        pickVideoController
+                                                            .controller
+                                                            .text = caption;
+                                                        pickVideoController
+                                                            .setPickedFileIndex(
+                                                              index,
+                                                            );
+                                                      }
+                                                    },
+                                                    child: GetBuilder<
+                                                      PickVideosController
+                                                    >(
+                                                      builder: (controller) {
+                                                        final thumbs =
+                                                            controller
+                                                                .thumbnails;
+                                                        final validThumb =
+                                                            index >= 0 &&
+                                                            index <
+                                                                thumbs.length;
+                                                        final validFile =
+                                                            index >= 0 &&
+                                                            index <
+                                                                files.length;
+                                                        if (!validThumb ||
+                                                            !validFile) {
+                                                          return const SizedBox.shrink();
+                                                        }
+                                                        return Container(
+                                                          height: 60,
+                                                          width: 50,
+                                                          margin:
+                                                              const EdgeInsets.only(
+                                                                right: 5,
+                                                              ),
+                                                          decoration: BoxDecoration(
+                                                            border:
+                                                                controller.pickedFileIndex ==
+                                                                        index
+                                                                    ? Border(
+                                                                      bottom: BorderSide(
+                                                                        color:
+                                                                            theme.onTertiary,
+                                                                        width:
+                                                                            3,
                                                                       ),
-                                                                  decoration: BoxDecoration(
-                                                                    border:
-                                                                        controller.pickedFileIndex ==
-                                                                                index
-                                                                            ? Border(
-                                                                              bottom: BorderSide(
-                                                                                color:
-                                                                                    theme.onTertiary,
-                                                                                width:
-                                                                                    3,
-                                                                              ),
-                                                                            )
-                                                                            : null,
-                                                                  ),
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child: ClipRRect(
-                                                                          borderRadius: BorderRadius.all(
-                                                                            Radius.circular(
-                                                                              10,
-                                                                            ),
-                                                                          ),
-                                                                          child: Opacity(
-                                                                            opacity:
-                                                                                controller.pickedFileIndex ==
-                                                                                        index
-                                                                                    ? 1
-                                                                                    : 0.5,
-                                                                            child: SizedBox(
-                                                                              height:
-                                                                                  60,
-                                                                              width:
-                                                                                  50,
-                                                                              child:
-                                                                                  pickVideoController.thumbnails.isNotEmpty &&
-                                                                                          pickVideoController.thumbnails.length ==
-                                                                                              chatsController.pickedFiles.length
-                                                                                      ? Image.memory(
-                                                                                        base64Decode(
-                                                                                          pickVideoController.thumbnails[index]
-                                                                                              .split(
-                                                                                                ',',
-                                                                                              )
-                                                                                              .last,
-                                                                                        ),
-                                                                                        fit:
-                                                                                            BoxFit.cover,
-                                                                                      )
-                                                                                      : Center(
-                                                                                        child:
-                                                                                            CircularProgressIndicator(),
-                                                                                      ),
-                                                                            ),
-                                                                          ),
+                                                                    )
+                                                                    : null,
+                                                          ),
+                                                          child: Column(
+                                                            children: [
+                                                              Expanded(
+                                                                child: ClipRRect(
+                                                                  borderRadius:
+                                                                      const BorderRadius.all(
+                                                                        Radius.circular(
+                                                                          10,
                                                                         ),
                                                                       ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            5,
-                                                                      ),
-                                                                    ],
+                                                                  child: Opacity(
+                                                                    opacity:
+                                                                        controller.pickedFileIndex ==
+                                                                                index
+                                                                            ? 1
+                                                                            : 0.5,
+                                                                    child: SizedBox(
+                                                                      height:
+                                                                          60,
+                                                                      width: 50,
+                                                                      child:
+                                                                          (thumbs.isNotEmpty &&
+                                                                                  thumbs.length ==
+                                                                                      files.length)
+                                                                              ? Image.memory(
+                                                                                base64Decode(
+                                                                                  thumbs[index]
+                                                                                      .split(
+                                                                                        ',',
+                                                                                      )
+                                                                                      .last,
+                                                                                ),
+                                                                                fit:
+                                                                                    BoxFit.cover,
+                                                                              )
+                                                                              : Container(
+                                                                                color:
+                                                                                    Colors.black,
+                                                                                child: const Center(
+                                                                                  child: SizedBox(
+                                                                                    height:
+                                                                                        20,
+                                                                                    width:
+                                                                                        20,
+                                                                                    child:
+                                                                                        CircularProgressIndicator(),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                    ),
                                                                   ),
                                                                 ),
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ),
-                                                      )
-                                                      : SizedBox.shrink();
-                                                }),
-                                              ],
-                                            ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                )
+                                                : const SizedBox.shrink();
+                                          }),
+                                        ],
                                       ),
                                     ),
                                   ),

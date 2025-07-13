@@ -9,11 +9,12 @@ import 'package:hankalis_clan/controller/history_slaves_controller.dart';
 import 'package:hankalis_clan/controller/homepage_controller.dart';
 import 'package:hankalis_clan/controller/leaderboard_controller.dart';
 import 'package:hankalis_clan/controller/news_activity_controller.dart';
+import 'package:hankalis_clan/controller/pick_document_controller.dart';
 import 'package:hankalis_clan/controller/pick_images_controller.dart';
 import 'package:hankalis_clan/controller/pick_videos_controller.dart';
 import 'package:hankalis_clan/controller/sell_slave_controller.dart';
 import 'package:hankalis_clan/controller/side_bar_controller.dart';
-import 'package:hankalis_clan/controller/view_image_controller.dart';
+import 'package:hankalis_clan/controller/animations_controller.dart';
 
 class HomepageBinding extends Bindings {
   @override
@@ -26,12 +27,13 @@ class HomepageBinding extends Bindings {
     Get.lazyPut(() => GamesController(), fenix: true);
     Get.lazyPut(() => SellSlaveController(), fenix: true);
     Get.lazyPut(() => HistorySlavesController(), fenix: true);
-    Get.lazyPut(() => ViewImageController(), fenix: true);
     Get.lazyPut(() => HistoryNewsController(), fenix: true);
     Get.lazyPut(() => FriendsController(), fenix: true);
     Get.lazyPut(() => CreatePublicRoomController(), fenix: true);
     Get.lazyPut(() => ChatsController(), fenix: true);
     Get.lazyPut(() => PickImagesController(), fenix: true);
     Get.lazyPut(() => PickVideosController(), fenix: true);
+    Get.lazyPut(() => AnimationsController(), fenix: true);
+    Get.lazyPut(() => PickDocumentController(), fenix: true);
   }
 }

@@ -1,9 +1,8 @@
-import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/controller/chats_controller.dart';
 import 'package:hankalis_clan/controller/pick_images_controller.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:hankalis_clan/widgets/emojis_widget.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
 
 class PickImages extends StatelessWidget {
@@ -62,13 +61,18 @@ class PickImages extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GetBuilder<PickImagesController>(
-                        builder:
-                            (controller) => Text(
-                              chatsController
-                                  .pickedFiles[controller.pickedFileIndex]
-                                  .name,
-                              textAlign: TextAlign.center,
-                            ),
+                        builder: (controller) {
+                          final files = chatsController.pickedFiles;
+                          final idx = controller.pickedFileIndex;
+                          final valid =
+                              files.isNotEmpty &&
+                              idx >= 0 &&
+                              idx < files.length;
+                          return Text(
+                            valid ? files[idx].name : "No file selected",
+                            textAlign: TextAlign.center,
+                          );
+                        },
                       ),
                     ),
                     Padding(
@@ -80,12 +84,25 @@ class PickImages extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         child: GetBuilder<PickImagesController>(
-                          builder:
-                              (controller) => Image.memory(
-                                chatsController
-                                    .pickedFiles[controller.pickedFileIndex]
-                                    .bytes!,
-                              ),
+                          builder: (controller) {
+                            final files = chatsController.pickedFiles;
+                            final idx = controller.pickedFileIndex;
+                            final valid =
+                                files.isNotEmpty &&
+                                idx >= 0 &&
+                                idx < files.length &&
+                                files[idx].bytes != null;
+                            return valid
+                                ? Image.memory(files[idx].bytes!)
+                                : Container(
+                                  height: 300,
+                                  width: double.infinity,
+                                  color: Colors.grey.shade200,
+                                  child: Center(
+                                    child: Text("No image selected"),
+                                  ),
+                                );
+                          },
                         ),
                       ),
                     ),
@@ -108,116 +125,14 @@ class PickImages extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                OverlayPortal(
-                                  controller:
+                                EmojisWidget(
+                                  emojisBtnKey:
+                                      pickImagesController.emojisBtnKey,
+                                  overlayPortalController:
                                       pickImagesController.overlayPortal,
-                                  overlayChildBuilder: (context) {
-                                    final RenderBox renderBox =
-                                        pickImagesController
-                                                .emojisBtnKey
-                                                .currentContext!
-                                                .findRenderObject()
-                                            as RenderBox;
-                                    final Offset offset = renderBox
-                                        .localToGlobal(Offset.zero);
-                                    return Stack(
-                                      children: [
-                                        Positioned.fill(
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              pickImagesController.overlayPortal
-                                                  .hide();
-                                            },
-                                            behavior: HitTestBehavior.opaque,
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: offset.dy - 300,
-                                          left: offset.dx,
-                                          child: Material(
-                                            elevation: 10,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(15),
-                                            ),
-                                            child: SizedBox(
-                                              height: 300,
-                                              width: 350,
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(15),
-                                                ),
-                                                child: EmojiPicker(
-                                                  onEmojiSelected:
-                                                      (
-                                                        Category? category,
-                                                        Emoji emoji,
-                                                      ) => pickImagesController
-                                                          .onEmojiSelected(
-                                                            emoji,
-                                                          ),
-                                                  onBackspacePressed: () {},
-                                                  config: Config(
-                                                    height: 50,
-                                                    checkPlatformCompatibility:
-                                                        true,
-                                                    emojiViewConfig: EmojiViewConfig(
-                                                      gridPadding:
-                                                          const EdgeInsets.all(
-                                                            5,
-                                                          ),
-                                                      recentsLimit: 15,
-                                                      replaceEmojiOnLimitExceed:
-                                                          true,
-                                                      loadingIndicator: Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      ),
-                                                      backgroundColor:
-                                                          theme.onSecondary,
-                                                      emojiSizeMax:
-                                                          20 *
-                                                          (foundation.kIsWeb
-                                                              ? 1.30
-                                                              : 1.0),
-                                                    ),
-                                                    viewOrderConfig:
-                                                        const ViewOrderConfig(
-                                                          top:
-                                                              EmojiPickerItem
-                                                                  .categoryBar,
-                                                          middle:
-                                                              EmojiPickerItem
-                                                                  .emojiView,
-                                                        ),
-                                                    skinToneConfig:
-                                                        const SkinToneConfig(),
-                                                    categoryViewConfig:
-                                                        CategoryViewConfig(
-                                                          backgroundColor:
-                                                              theme.onSecondary,
-                                                          dividerColor:
-                                                              theme
-                                                                  .onPrimaryContainer,
-                                                          iconColorSelected:
-                                                              theme.onTertiary,
-                                                          indicatorColor:
-                                                              theme.onTertiary,
-                                                        ),
-                                                    bottomActionBarConfig:
-                                                        BottomActionBarConfig(
-                                                          enabled: false,
-                                                        ),
-                                                    searchViewConfig:
-                                                        const SearchViewConfig(),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
+                                  onEmojiSelected:
+                                      (category, emoji) => pickImagesController
+                                          .onEmojiSelected(emoji),
                                 ),
                                 GetBuilder<PickImagesController>(
                                   builder:
@@ -256,16 +171,23 @@ class PickImages extends StatelessWidget {
                                 Expanded(
                                   child: TextFormField(
                                     onChanged: (value) {
-                                      if (pickImagesController.pickedFileIndex <
-                                          pickImagesController
-                                              .captions
-                                              .length) {
-                                        pickImagesController
-                                            .captions[pickImagesController
-                                            .pickedFileIndex] = {
+                                      final idx =
+                                          pickImagesController.pickedFileIndex;
+                                      if (idx >= 0 &&
+                                          idx <
+                                              pickImagesController
+                                                  .captions
+                                                  .length) {
+                                        pickImagesController.captions[idx] = {
                                           'caption': value,
                                         };
-                                      } else {
+                                      } else if (idx >= 0) {
+                                        while (pickImagesController
+                                                .captions
+                                                .length <
+                                            idx) {
+                                          pickImagesController.captions.add({});
+                                        }
                                         pickImagesController.captions.add({
                                           'caption': value,
                                         });
@@ -292,9 +214,16 @@ class PickImages extends StatelessWidget {
                                   cursor: SystemMouseCursors.click,
                                   child: GestureDetector(
                                     onTap: () {
-                                      pickImagesController.removePickedFile(
-                                        pickImagesController.pickedFileIndex,
-                                      );
+                                      final idx =
+                                          pickImagesController.pickedFileIndex;
+                                      final files = chatsController.pickedFiles;
+                                      if (files.isNotEmpty &&
+                                          idx >= 0 &&
+                                          idx < files.length) {
+                                        pickImagesController.removePickedFile(
+                                          idx,
+                                        );
+                                      }
                                     },
                                     child: Container(
                                       height: 50,
@@ -337,12 +266,18 @@ class PickImages extends StatelessWidget {
                                                 ...List.generate(controller.pickedFiles.length, (
                                                   index,
                                                 ) {
-                                                  final isValidIndex =
-                                                      index <
+                                                  final files =
                                                       chatsController
-                                                          .pickedFiles
-                                                          .length;
-                                                  return isValidIndex
+                                                          .pickedFiles;
+                                                  final captions =
+                                                      pickImagesController
+                                                          .captions;
+                                                  final isValidFileIndex =
+                                                      index >= 0 &&
+                                                      index < files.length &&
+                                                      files[index].bytes !=
+                                                          null;
+                                                  return isValidFileIndex
                                                       ? MouseRegion(
                                                         cursor:
                                                             SystemMouseCursors
@@ -352,20 +287,21 @@ class PickImages extends StatelessWidget {
                                                             if (index !=
                                                                 pickImagesController
                                                                     .pickedFileIndex) {
-                                                              if (index >=
-                                                                  pickImagesController
-                                                                      .captions
-                                                                      .length) {
-                                                                pickImagesController
-                                                                    .captions
-                                                                    .add({});
+                                                              // Ensure captions list is long enough
+                                                              while (captions
+                                                                      .length <=
+                                                                  index) {
+                                                                captions.add(
+                                                                  {},
+                                                                );
                                                               }
+                                                              final caption =
+                                                                  captions[index]['caption'] ??
+                                                                  '';
                                                               pickImagesController
                                                                       .controller
                                                                       .text =
-                                                                  pickImagesController
-                                                                      .captions[index]['caption'] ??
-                                                                  '';
+                                                                  caption;
                                                               pickImagesController
                                                                   .setPickedFileIndex(
                                                                     index,
@@ -416,7 +352,7 @@ class PickImages extends StatelessWidget {
                                                                                     ? 1
                                                                                     : 0.5,
                                                                             child: Image.memory(
-                                                                              chatsController.pickedFiles[index].bytes!,
+                                                                              files[index].bytes!,
                                                                               height:
                                                                                   60,
                                                                               width:

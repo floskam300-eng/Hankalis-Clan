@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:get/get.dart';
 import 'package:hankalis_clan/controller/chats_controller.dart';
+import 'package:hankalis_clan/controller/animations_controller.dart';
 
 class AttachmentItem extends StatelessWidget {
   const AttachmentItem({
@@ -8,7 +9,7 @@ class AttachmentItem extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.index,
-    required this.onTap
+    required this.onTap,
   });
 
   final String title;
@@ -20,19 +21,20 @@ class AttachmentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    return GetBuilder<ChatsController>(
+    final chatsController = Get.find<ChatsController>();
+    return GetBuilder<AnimationsController>(
       builder: (controller) {
         final isEntered =
-            controller.isEntered && controller.attachmentIndex == index;
+            controller.isEntered && chatsController.attachmentIndex == index;
         return MouseRegion(
           cursor: SystemMouseCursors.click,
           onEnter: (event) {
             controller.isEntered = true;
-            controller.attachmentIndex = index;
+            chatsController.attachmentIndex = index;
           },
           onExit: (event) {
             controller.isEntered = false;
-            controller.attachmentIndex = -1;
+            chatsController.attachmentIndex = -1;
           },
           child: GestureDetector(
             onTap: onTap,

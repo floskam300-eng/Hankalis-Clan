@@ -51,7 +51,7 @@ class AddFriend extends StatelessWidget {
                       keyboardType: TextInputType.text,
                       validator:
                           (String? value) =>
-                              controller.valideInputes(value!, InputType.name),
+                              controller.validateInputs(value!, InputType.name),
                       controller: friendIdController,
                       style: TextStyle(fontSize: 14),
                       decoration: InputDecoration(

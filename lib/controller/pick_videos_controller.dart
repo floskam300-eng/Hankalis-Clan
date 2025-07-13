@@ -8,7 +8,6 @@ import 'dart:html' as html;
 
 class PickVideosController extends GetxController {
   final RxList<Map<String, String>> captions = <Map<String, String>>[].obs;
-  final _isHovered = false;
 
   final overlayPortal = OverlayPortalController();
   final chatsController = Get.find<ChatsController>();
@@ -16,7 +15,7 @@ class PickVideosController extends GetxController {
   VideoPlayerController? videoPlayerController;
   List<String> thumbnails = [];
 
-  bool _isEntered = false;
+  bool _isPlayed = false;
 
   final scrollController = ScrollController();
   final TextEditingController controller = TextEditingController();
@@ -25,8 +24,8 @@ class PickVideosController extends GetxController {
 
   int _pickedFileIndex = 0;
 
-  bool get isHovered => _isHovered;
-  bool get isEntered => _isEntered;
+  bool get isPlayed => _isPlayed;
+
   int get pickedFileIndex => _pickedFileIndex;
 
   @override
@@ -39,14 +38,13 @@ class PickVideosController extends GetxController {
   Future<void> initVideoPlayer() async {
     try {
       await videoPlayerController?.dispose();
-      debugPrint(chatsController.pickedFiles[pickedFileIndex].path!);
-      videoPlayerController =
-          VideoPlayerController.networkUrl(
-              Uri.parse(chatsController.pickedFiles[pickedFileIndex].path!),
-            )
-            ..addListener(() => update())
-            ..setLooping(true)
-            ..initialize();
+      videoPlayerController = VideoPlayerController.networkUrl(
+        Uri.parse(chatsController.pickedFiles[pickedFileIndex].path!),
+      );
+      await videoPlayerController!.setLooping(true);
+      await videoPlayerController!.setVolume(0.2);
+      await videoPlayerController!.initialize();
+      update();
     } catch (ex) {
       debugPrint("Error: $ex");
     }
@@ -102,44 +100,78 @@ class PickVideosController extends GetxController {
     }
   }
 
-  set isHovered(bool value) {
-    isHovered = value;
-    update();
-  }
-
-  set isEntered(bool value) {
-    _isEntered = value;
+  set isPlayed(bool value) {
+    _isPlayed = value;
     update();
   }
 
   void removePickedFile(int index) {
     if (index >= 0 && index < chatsController.pickedFiles.length) {
+      chatsController.pickedFiles.removeAt(index);
+      if (index < thumbnails.length) {
+        thumbnails.removeAt(index);
+      }
       if (index < captions.length) {
         captions.removeAt(index);
       }
-      chatsController.pickedFiles.removeAt(index);
+
       if (chatsController.pickedFiles.isEmpty) {
         Get.back();
-      } else {
-        final newIndex =
-            index >= chatsController.pickedFiles.length
-                ? chatsController.pickedFiles.length - 1
-                : index > 0
-                ? index - 1
-                : 0;
-        setPickedFileIndex(newIndex);
+        return;
       }
+
+      if (index < _pickedFileIndex) {
+        _pickedFileIndex--;
+      } else if (index == _pickedFileIndex) {
+        if (_pickedFileIndex >= chatsController.pickedFiles.length) {
+          _pickedFileIndex = chatsController.pickedFiles.length - 1;
+        }
+      }
+
+      if (_pickedFileIndex >= 0) {
+        initVideoPlayer();
+      }
+
       chatsController.update();
+      update();
     }
   }
 
-  void setPickedFileIndex(int index) {
-    _pickedFileIndex = index;
+  void playVideo() {
     if (videoPlayerController != null) {
-      videoPlayerController!.dispose();
-      videoPlayerController = null;
+      if (videoPlayerController!.value.isPlaying) {
+        videoPlayerController!.pause();
+        isPlayed = false;
+      } else {
+        videoPlayerController!.play();
+        isPlayed = true;
+      }
+      update();
     }
-    initVideoPlayer();
-    initThumbnails();
+  }
+
+  String? videoTime() {
+    if (videoPlayerController != null &&
+        videoPlayerController!.value.isInitialized) {
+      final duration = videoPlayerController!.value.duration;
+      final minutes = duration.inMinutes
+          .remainder(60)
+          .toString()
+          .padLeft(2, '0');
+      final seconds = duration.inSeconds
+          .remainder(60)
+          .toString()
+          .padLeft(2, '0');
+      return '$minutes:$seconds';
+    }
+    return null;
+  }
+
+  void setPickedFileIndex(int index) {
+    if (index >= 0 && index < chatsController.pickedFiles.length) {
+      _pickedFileIndex = index;
+      initVideoPlayer();
+      update();
+    }
   }
 }

@@ -39,7 +39,7 @@ class FriendsController extends GetxController {
     initializeFriendRequestCanceledFriendriend();
   }
 
-  String? valideInputes(String input, InputType type) {
+  String? validateInputs(String input, InputType type) {
     if (type == InputType.name) {
       if (input.trim().isEmpty ||
           input.length != "6812f9bd71d72857954a2baf".length) {
