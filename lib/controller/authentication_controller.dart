@@ -4,9 +4,9 @@ import 'dart:html' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/const.dart';
+import 'package:hankalis_clan/main.dart';
 
 import 'package:hankalis_clan/services/auth_service.dart';
-import 'package:hankalis_clan/services/services.dart';
 import 'package:toastification/toastification.dart';
 
 enum InputType { name, email, password }
@@ -76,7 +76,7 @@ class AuthenticationController extends GetxController {
           autoCloseDuration: const Duration(seconds: 5),
         );
 
-        Services.storage.setString("token", token!);
+        storage.setString("token", token!);
         Get.offAllNamed("/home", arguments: {"token": token});
       }
     } catch (e) {
@@ -102,7 +102,7 @@ class AuthenticationController extends GetxController {
     );
 
     if (response['message'] == null) {
-      Services.storage.setString("token", response['token']);
+      storage.setString("token", response['token']);
       toastification.show(
         title: Text("Login successful!"),
         type: ToastificationType.success,

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/const.dart';
+import 'package:hankalis_clan/controller/side_bar_controller.dart';
 import 'package:hankalis_clan/model/public_room.dart';
 import 'package:hankalis_clan/views/chat_view.dart';
 
@@ -13,6 +15,7 @@ class PublicRoomItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    final SideBarController sidebarController = Get.find<SideBarController>();
     return Column(
       children: [
         ClipRRect(
@@ -22,9 +25,14 @@ class PublicRoomItem extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
+                color:
+                    sidebarController.selectedChat == index
+                        ? theme.onPrimaryContainer
+                        : Colors.transparent,
               ),
               child: ListTile(
                 onTap: () {
+                  sidebarController.setSelectedChat = index;
                   if (checkDeviceSize() == DeviceType.mobile) {
                     Get.to(() => ChatView());
                   }
@@ -41,10 +49,14 @@ class PublicRoomItem extends StatelessWidget {
                 ),
                 leading: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(100)),
-                  child: Image.memory(
-                    room.picture,
+                  child: CachedNetworkImage(
+                    imageUrl: "http://$DOMAIN/downloads/rooms/${room.picture}",
                     fit: BoxFit.cover,
                     width: 40,
+                    height: 40,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget:
+                        (context, url, error) => Image.asset("assets/user.png"),
                   ),
                 ),
                 trailing:

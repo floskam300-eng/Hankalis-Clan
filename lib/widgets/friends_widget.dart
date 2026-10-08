@@ -10,8 +10,7 @@ class FriendsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    final FriendsController friendsController =
-        Get.find<FriendsController>();
+    final FriendsController friendsController = Get.find<FriendsController>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,

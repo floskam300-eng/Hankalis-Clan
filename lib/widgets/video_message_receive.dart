@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hankalis_clan/const.dart';
 import 'package:hankalis_clan/controller/chats_controller.dart';
 import 'package:hankalis_clan/controller/animations_controller.dart';
 
@@ -40,7 +41,12 @@ class VideoMessageReceive extends StatelessWidget {
               ),
               child: Container(
                 padding: EdgeInsets.all(5),
-                constraints: BoxConstraints(maxWidth: Get.width * 0.20),
+                constraints: BoxConstraints(
+                  maxWidth:
+                      checkDeviceSize() == DeviceType.mobile
+                          ? Get.width * 0.6
+                          : Get.width * 0.2,
+                ),
                 decoration: BoxDecoration(
                   color: theme.onPrimaryContainer,
                   borderRadius: BorderRadius.circular(20),
@@ -61,6 +67,7 @@ class VideoMessageReceive extends StatelessWidget {
                                         height: Get.width * 0.20,
                                         color: Colors.black,
                                         child: Stack(
+                                          alignment: Alignment.center,
                                           children: [
                                             Image.memory(
                                               base64Decode(
@@ -124,8 +131,7 @@ class VideoMessageReceive extends StatelessWidget {
                                                                       .isHovered =
                                                                   false;
                                                               mouseAnimationsController
-                                                                      .hoveredIndex =
-                                                                  -1;
+                                                                  .hoveredIndex = -1;
                                                             },
                                                             child: GestureDetector(
                                                               onTap:

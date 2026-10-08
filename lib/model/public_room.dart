@@ -1,8 +1,5 @@
-import 'dart:typed_data';
-
 class PublicRoom {
-  final String id, name, description, type, admin;
-  final Uint8List picture;
+  final String id, name, description, type, admin, picture;
   final List participants;
 
   PublicRoom({

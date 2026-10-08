@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hankalis_clan/const.dart';
 import 'package:hankalis_clan/controller/animations_controller.dart';
 import 'package:hankalis_clan/controller/video_player_screen_controller.dart';
 import 'package:video_player/video_player.dart';
@@ -36,7 +37,10 @@ class VideoPlayerScreen extends StatelessWidget {
                     child: FittedBox(
                       fit: BoxFit.contain,
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 50),
+                        margin: EdgeInsets.symmetric(
+                          vertical: 50,
+                          horizontal: 10,
+                        ),
                         width: width,
                         height: height,
                         child: ClipRRect(
@@ -59,7 +63,10 @@ class VideoPlayerScreen extends StatelessWidget {
                               ),
                               child: Container(
                                 height: 50,
-                                width: Get.width * 0.5,
+                                width:
+                                    checkDeviceSize() == DeviceType.mobile
+                                        ? Get.width * 0.9
+                                        : Get.width * 0.5,
                                 decoration: BoxDecoration(
                                   color: Color.fromRGBO(30, 33, 34, 1),
                                   borderRadius: BorderRadius.all(

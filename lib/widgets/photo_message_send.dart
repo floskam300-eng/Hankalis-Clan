@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hankalis_clan/const.dart';
 
 class PhotoMessageSend extends StatelessWidget {
   const PhotoMessageSend({
@@ -41,7 +42,12 @@ class PhotoMessageSend extends StatelessWidget {
               ),
               child: Container(
                 padding: EdgeInsets.all(5),
-                constraints: BoxConstraints(maxWidth: Get.width * 0.20),
+                constraints: BoxConstraints(
+                  maxWidth:
+                      checkDeviceSize() == DeviceType.mobile
+                          ? Get.width * 0.6
+                          : Get.width * 0.2,
+                ),
                 decoration: BoxDecoration(
                   color: theme.onTertiary,
                   borderRadius: BorderRadius.circular(20),
@@ -53,7 +59,52 @@ class PhotoMessageSend extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(asset),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.generalDialog(
+                              pageBuilder:
+                                  (
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                  ) => Scaffold(
+                                    backgroundColor: Colors.transparent,
+                                    body: Stack(
+                                      children: [
+                                        Positioned.fill(
+                                          child: GestureDetector(
+                                            onTap: () => Get.back(),
+                                            behavior: HitTestBehavior.opaque,
+                                          ),
+                                        ),
+                                        Center(
+                                          child: ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                              maxWidth: Get.width * 0.8,
+                                              maxHeight: Get.height * 0.8,
+                                            ),
+                                            child: Hero(
+                                              tag: asset,
+                                              child: InteractiveViewer(
+                                                child: MouseRegion(
+                                                  cursor:
+                                                      SystemMouseCursors.grab,
+                                                  child: Image.asset(
+                                                    asset,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                            );
+                          },
+                          child: Hero(tag: asset, child: Image.asset(asset)),
+                        ),
                       ),
                       Visibility(
                         visible: true,

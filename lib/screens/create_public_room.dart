@@ -142,8 +142,8 @@ class CreatePublicRoom extends StatelessWidget {
                                                                     context,
                                                                     url,
                                                                     error,
-                                                                  ) => Icon(
-                                                                    Icons.error,
+                                                                  ) => Image.asset(
+                                                                    "assets/user.png",
                                                                   ),
                                                             ),
                                                   ),

@@ -5,14 +5,20 @@ import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter/material.dart';
+import 'package:hankalis_clan/controller/homepage_controller.dart';
+import 'package:hankalis_clan/services/message.dart';
 import 'package:hankalis_clan/widgets/pick_document.dart';
 import 'package:hankalis_clan/widgets/pick_images.dart';
 import 'package:hankalis_clan/widgets/pick_videos.dart';
+
+import 'package:hankalis_clan/model/message.dart' as message_model;
 
 // ignore: deprecated_member_use
 import 'dart:html' as html;
 
 class ChatsController extends GetxController {
+  final homepageController = Get.find<HomepageController>();
+
   List<String> thumbnails = [];
   final controller = TextEditingController();
 
@@ -22,6 +28,7 @@ class ChatsController extends GetxController {
   late final OverlayPortalController emojisOverlayPortalController;
 
   final attachmentKey = GlobalKey();
+  final formKey = GlobalKey<FormState>();
 
   List<PlatformFile> pickedFiles = [];
 
@@ -47,9 +54,16 @@ class ChatsController extends GetxController {
     );
   }
 
+  String? validator(String? value) {
+    if (value!.trim().isEmpty) {
+      return "Message can't be empty.";
+    }
+    return null;
+  }
+
   String formatBytes(int bytes, {int decimals = 2}) {
     if (bytes <= 0) return "0 B";
-    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    const suffixes = ["B", "KB", "MB", "GB", "TB"];
     var i = (log(bytes) / log(1024)).floor();
     return '${(bytes / pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
   }
@@ -87,6 +101,19 @@ class ChatsController extends GetxController {
     update();
 
     video.remove();
+  }
+
+  void sendMessage({required String roomId, String? message}) {
+    if (formKey.currentState!.validate()) {
+      Message(homepageController.socket).sendMessage(
+        message_model.Message(
+          roomId: roomId,
+          senderId: homepageController.user['id'],
+          text: message ?? controller.text,
+        ),
+      );
+      controller.clear();
+    }
   }
 
   void addAttachmentPhotos() async {

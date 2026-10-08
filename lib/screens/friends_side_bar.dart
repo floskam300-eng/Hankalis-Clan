@@ -154,9 +154,9 @@ class FriendsSideBar extends StatelessWidget {
                                                     name:
                                                         controller
                                                             .privateRooms[index]['name'],
-                                                    photoUrl:
+                                                    picture:
                                                         controller
-                                                            .privateRooms[index]['photoUrl'],
+                                                            .privateRooms[index]['picture'],
                                                     type:
                                                         controller
                                                             .privateRooms[index]['type'],
@@ -198,11 +198,7 @@ class FriendsSideBar extends StatelessWidget {
                                                         controller
                                                             .publicRooms[index]['participants'],
                                                   ),
-                                                  index:
-                                                      controller
-                                                          .privateRooms
-                                                          .length +
-                                                      index,
+                                                  index: controller.privateRooms.length + index,
                                                 ),
                                             ],
                                           ),

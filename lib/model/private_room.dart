@@ -1,11 +1,11 @@
 class PrivateRoom {
   final String id, name, type;
-  final String? photoUrl;
+  final String? picture;
 
   PrivateRoom({
     required this.id,
     required this.name,
-    this.photoUrl,
+    this.picture,
     required this.type,
   });
 }

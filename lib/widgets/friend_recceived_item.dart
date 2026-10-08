@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class FriendRecceivedItem extends StatelessWidget {
@@ -69,7 +70,15 @@ class FriendRecceivedItem extends StatelessWidget {
           child:
               picture == null
                   ? Image.asset("assets/user.png")
-                  : Image.network(picture!),
+                  : CachedNetworkImage(
+                    imageUrl: picture!,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget:
+                        (context, url, error) => Image.asset("assets/user.png"),
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                  ),
         ),
       ),
     );

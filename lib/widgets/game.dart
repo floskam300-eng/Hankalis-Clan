@@ -67,25 +67,39 @@ class Game extends StatelessWidget {
                 onTap: () {
                   Get.generalDialog(
                     pageBuilder:
-                        (context, animation, secondaryAnimation) =>
-                            GestureDetector(
-                              onTap: () => Get.back(),
-                              child: Scaffold(
-                                backgroundColor: Colors.transparent,
-                                body: Center(
-                                  child: SizedBox(
-                                    width: Get.width * 0.8,
-                                    child: Hero(
-                                      tag: photo,
-                                      child: Image.asset(
-                                        photo,
-                                        fit: BoxFit.fitWidth,
+                        (context, animation, secondaryAnimation) => Scaffold(
+                          backgroundColor: Colors.transparent,
+                          body: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: GestureDetector(
+                                  onTap: () => Get.back(),
+                                  behavior: HitTestBehavior.opaque,
+                                ),
+                              ),
+                              Center(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: Get.width * 0.8,
+                                    maxHeight: Get.height * 0.8,
+                                  ),
+                                  child: Hero(
+                                    tag: photo,
+                                    child: InteractiveViewer(
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.grab,
+                                        child: Image.asset(
+                                          photo,
+                                          fit: BoxFit.contain,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
+                            ],
+                          ),
+                        ),
                   );
                 },
                 child: Hero(

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/controller/homepage_controller.dart';
@@ -26,6 +24,7 @@ class FriendsSideBarController extends GetxController {
     initializePrivateRooms();
     initializePublicRoomCreated();
     initializePublicRooms();
+    initializeReceiveMessages();
   }
 
   void initializeRoomServices() {
@@ -75,6 +74,11 @@ class FriendsSideBarController extends GetxController {
     });
   }
 
+  void initializeReceiveMessages() => homepageController.socket.on(
+    "receive_message",
+    (data) => debugPrint(data),
+  );
+
   void initializePrivateRooms() {
     roomServices.emitPrivateRooms(homepageController.user['id']);
     roomServices.onPrivateRooms((rooms) {
@@ -93,9 +97,6 @@ class FriendsSideBarController extends GetxController {
     roomServices.emitPublicRooms(homepageController.user['id']);
     roomServices.onPublicRooms((rooms) {
       try {
-        for (final Map<String, dynamic> room in rooms) {
-          room['picture'] = base64Decode(room['picture']);
-        }
         publicRooms.addAll(
           (rooms as List).map((e) => e as Map<String, dynamic>),
         );
@@ -111,7 +112,6 @@ class FriendsSideBarController extends GetxController {
       try {
         if (room is Map<String, dynamic> && room.containsKey('id')) {
           if (!publicRooms.any((element) => element['id'] == room['id'])) {
-            room['picture'] = base64Decode(room['picture']);
             publicRooms.add(room);
             update();
           } else {

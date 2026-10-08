@@ -2,6 +2,7 @@ import "dart:io";
 
 import "package:flutter/material.dart";
 import "package:get/get.dart";
+import "package:hankalis_clan/const.dart";
 import "package:hankalis_clan/controller/chats_controller.dart";
 
 class DocumentMessageReceive extends StatelessWidget {
@@ -38,7 +39,12 @@ class DocumentMessageReceive extends StatelessWidget {
               ),
               child: Container(
                 padding: EdgeInsets.all(5),
-                constraints: BoxConstraints(maxWidth: Get.width * 0.20),
+                constraints: BoxConstraints(
+                  maxWidth:
+                      checkDeviceSize() == DeviceType.mobile
+                          ? Get.width * 0.6
+                          : Get.width * 0.2,
+                ),
                 decoration: BoxDecoration(
                   color: theme.onPrimaryContainer,
                   borderRadius: BorderRadius.circular(20),

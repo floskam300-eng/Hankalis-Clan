@@ -46,7 +46,9 @@ class CustomPopupmenuitem extends StatelessWidget {
                       fit: BoxFit.cover,
                       placeholder:
                           (context, url) => CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget:
+                          (context, url, error) =>
+                              Image.asset("assets/user.png"),
                     )
                     : Image.asset(
                       "assets/user.png",

@@ -8,7 +8,7 @@ import "package:get/get.dart";
 import "package:hankalis_clan/const.dart";
 import "package:hankalis_clan/controller/homepage_controller.dart";
 import "package:hankalis_clan/controller/side_bar_controller.dart";
-import "package:hankalis_clan/services/services.dart";
+import "package:hankalis_clan/main.dart";
 import "package:hankalis_clan/widgets/change_themes_buttons.dart";
 import "package:hankalis_clan/widgets/side_bar_item.dart";
 import "package:toastification/toastification.dart";
@@ -165,7 +165,9 @@ class SideBar extends StatelessWidget {
                                                     CircularProgressIndicator(),
                                             errorWidget:
                                                 (context, url, error) =>
-                                                    Icon(Icons.error),
+                                                    Image.asset(
+                                                      "assets/user.png",
+                                                    ),
                                           )
                                           : Image.asset(
                                             "../assets/user.png",
@@ -179,7 +181,7 @@ class SideBar extends StatelessWidget {
                                 cursor: SystemMouseCursors.click,
                                 child: GestureDetector(
                                   onTap: () async {
-                                    await Services.storage.remove("token");
+                                    await storage.remove("token");
                                     html.window.location.href = '/';
                                     toastification.show(
                                       title: Text("Token removed!"),

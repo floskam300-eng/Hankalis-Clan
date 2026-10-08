@@ -11,15 +11,19 @@ class SideBarController extends GetxController {
   bool _isSideBarOpen = true;
   int _selectedButton = 0;
   int _selectedItem = 0;
+  int _selectedChat = -1;
 
   int get selectedItem => _selectedItem;
   int get selectedButton => _selectedButton;
+  int get selectedChat => _selectedChat;
   bool get isSideBarOpen => _isSideBarOpen;
 
   Widget handleSideBarScreens() {
     if (selectedItem == 0) {
       return checkDeviceSize() != DeviceType.mobile
-          ? Chats()
+          ? selectedChat == -1
+              ? NoChats()
+              : Chats()
           : checkDeviceSize() == DeviceType.mobile
           ? SizedBox()
           : NoChats();
@@ -35,6 +39,11 @@ class SideBarController extends GetxController {
 
   void setSelectedButton(int index) {
     _selectedButton = index;
+    update();
+  }
+
+  set setSelectedChat(int index) {
+    _selectedChat = index;
     update();
   }
 

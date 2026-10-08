@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hankalis_clan/const.dart';
+import 'package:hankalis_clan/controller/side_bar_controller.dart';
 import 'package:hankalis_clan/model/private_room.dart';
 import 'package:hankalis_clan/views/chat_view.dart';
 
@@ -14,6 +15,7 @@ class PrivateRoomItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    final SideBarController sidebarController = Get.find<SideBarController>();
     return Column(
       children: [
         ClipRRect(
@@ -23,9 +25,14 @@ class PrivateRoomItem extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
+                color:
+                    sidebarController.selectedChat == index
+                        ? theme.onPrimaryContainer
+                        : Colors.transparent,
               ),
               child: ListTile(
                 onTap: () {
+                  sidebarController.setSelectedChat = index;
                   if (checkDeviceSize() == DeviceType.mobile) {
                     Get.to(() => ChatView());
                   }
@@ -43,15 +50,16 @@ class PrivateRoomItem extends StatelessWidget {
                 leading: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                   child:
-                      room.photoUrl != null
+                      room.picture != null
                           ? CachedNetworkImage(
                             height: 40,
                             width: 40,
-                            imageUrl: room.photoUrl!,
+                            imageUrl: room.picture!,
                             placeholder:
                                 (context, url) => CircularProgressIndicator(),
                             errorWidget:
-                                (context, url, error) => Icon(Icons.error),
+                                (context, url, error) =>
+                                    Image.asset("assets/user.png"),
                           )
                           : Image.asset(
                             "assets/user.png",
@@ -67,7 +75,7 @@ class PrivateRoomItem extends StatelessWidget {
                           child: CircleAvatar(
                             backgroundColor: Color.fromRGBO(62, 220, 120, 1),
                             child: Text(
-                              "0".toString(),
+                              "0",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 12,
